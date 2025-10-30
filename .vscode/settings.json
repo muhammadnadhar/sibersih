@@ -1,0 +1,6 @@
+{
+    "[blade]": {
+        // "format"
+        "editor.formatOnSave": true
+    }
+}

@@ -2,8 +2,17 @@
 
 ### Tech Stack
 
+<p align="center">
+  <a href="https://skillicons.dev" target="_blank" rel="noopener noreferrer">
+    <img
+      src="https://skillicons.dev/icons?i=php,laravel,tailwindcss&perline=4"
+      alt="Stack: Typescript, React, Tailwind CSS, Anime.js"
+    />
+  </a>
+</p>
+
 1. laravel : framework php
-2. boostrap : framework CSS
+2. Tailwindcss : framework CSS
 3. chart.js : library chart dari JS
 4. Mysql : untuk Database
 
@@ -20,6 +29,10 @@
 -   `admin` : handle untuk admin
 -   `petugas` : handle untuk petugas
 
+### Note
+
+-   untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>
+
 ### Color App
 
 Teks utama: #1E293B
@@ -32,4 +45,4 @@ Putih kartu: #FFFFFF
 
 ### kelompok - 8
 
--   Muhammad
+-   bgdar
