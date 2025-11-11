@@ -5,32 +5,29 @@
 <p align="center">
   <a href="https://skillicons.dev" target="_blank" rel="noopener noreferrer">
     <img
-      src="https://skillicons.dev/icons?i=php,laravel,tailwindcss&perline=4"
-      alt="Stack: Typescript, React, Tailwind CSS, Anime.js"
+      src="https://skillicons.dev/icons?i=php,laravel,js,bootstrap&perline=4"
+      alt="Stack: php , laravel, javascript, bootstrap "
     />
   </a>
 </p>
 
 1. laravel : framework php
-2. Tailwindcss : framework CSS
+2. Boostrap : framework CSS
 3. chart.js : library chart dari JS
 4. Mysql : untuk Database
 
 ### controller || model || Route
 
--   `base` : controller untuk base
-    1. dashboard
-    2. peta lokasi
--   `laporan` : handle
--   `user` : untuk user , tapi sudah ada bawaan
+base controler **Utama** 
+- UserControleer : untuk handle user Route 
     1. profile : handle untuk tampilan profile
-    2. sign-in : handle untuk login
-    3. sign-up : handle untuk reqister
--   `admin` : handle untuk admin
--   `petugas` : handle untuk petugas
+    2. peta lokasi 
+    3. sign-in : handle untuk login
+    4. sign-up : handle untuk reqister
+- PetugasControler : untuk handle petugas Route 
+- AdminControler  : untuk handle admin controller
 
 ### Note
-
 -   untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>
 
 ### Color App
@@ -45,4 +42,4 @@ Putih kartu: #FFFFFF
 
 ### kelompok - 8
 
--   bgdar
+-   muhammad nadhar (230705083)

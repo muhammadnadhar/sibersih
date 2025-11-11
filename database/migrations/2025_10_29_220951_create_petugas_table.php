@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('petugas', function (Blueprint $table) {
             $table->id();
+            $table->string("username");
+            $table->string("password");
+            $table->string("email")->unique();
             $table->timestamps();
         });
     }
