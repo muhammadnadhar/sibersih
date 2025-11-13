@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->json("report_success")->nullable(); // report yang succes di lakukan oleh user
+            $table->json("report_pandding")->nullable(); // report yang masih menunggu
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string("username");
-            $table->string("email")->unique();
             $table->string("password");
+            $table->string("email")->unique();
+            // admin punya penghubung ke petugas dan user
+            $table->foreignId("user_id")->references("id")->on("user")->onDelete("cascade");
+            $table->foreignId("petugas_id")->references("id")->on("petugas")->onDelete("cascade");
             $table->timestamps();
         });
     }

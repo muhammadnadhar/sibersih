@@ -16,6 +16,12 @@
 3. chart.js : library chart dari JS
 4. Mysql : untuk Database
 
+###  kerja sama  
+kalian **Fork** Repo ini ke repo kalian masing masing e , habis itu , clone ke local dan  masuk aja ke branch masing masing :
+misal : git checkout -b masda , atau git checkout -b zada 
+di sini kalian handle aja tugas kalian , habis itu kalian push aja ke repo yang di fork , nantik muncul notif di github **SIBERSIH** 
+> pokoknya branch utama project ini ada di **main** , jadi kalau kalian udah siap dan pasti nantik aku aprove , untuk di masukan ke  **main** project 
+
 ### controller || model || Route
 
 base controler **Utama** 

@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string("username");
             $table->string("password");
             $table->string("email")->unique();
+            $table->string("telepon")->nullable();
+            $table->json("report_success")->nullable();   // simpna laporan yang sudah di siapin
+            $table->json("report_pandding")->nullable();
             $table->timestamps();
         });
     }

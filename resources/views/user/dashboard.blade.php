@@ -14,7 +14,6 @@
     </div>
   </div>
 
-  <!-- Statistik -->
   <div class="row g-4 mb-4">
     <div class="col-12 col-sm-6 col-lg-3">
       <div class="card shadow-sm border-0 rounded-4">
