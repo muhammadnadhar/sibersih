@@ -38,7 +38,7 @@
             <div class="d-none d-md-flex flex-column vh-100 bg-primary text-white p-4" style="width: 240px;">
                 <h4 class="text-center fw-bold mb-4"> SIBERSIH</h4>
                 <nav class="nav flex-column">
-                    <a href="#"
+                    <a href="{{ route('user.dashboard') }}"
                         class="nav-link text-white bg-opacity-50 bg-primary rounded px-3 py-2 active">Dashboard</a>
                     <a href="#" class="nav-link text-white px-3 py-2">Laporan Sampah</a>
                     <a href="#" class="nav-link text-white px-3 py-2">Petugas</a>

@@ -29,24 +29,26 @@ di sini kalian handle aja tugas kalian , habis itu kalian push aja ke repo yang 
 
 base controler **Utama**
 
-- UserControleer : untuk handle user Route
+-   UserControleer : untuk handle user Route
     1. profile : handle untuk tampilan profile
     2. peta lokasi
     3. sign-in : handle untuk login
     4. sign-up : handle untuk reqister
-- PetugasControler : untuk handle petugas Route
-- AdminControler : untuk handle admin controller
+    5. laporan : untk petugas dan user , dia menghandle di controller terpisah
+-   PetugasControler : untuk handle petugas Route
+-   AdminControler : untuk handle admin controller
 
 ### Middleware
-Ini middleware utama kami :
-- `UserLogin` : middleare untuk login
-- `PetugasLogin` : middleare untuk login petugas
-- `AdminLogin` : middlware untuk login Admin
 
+Ini middleware utama kami :
+
+-   `UserLogin` : middleare untuk login
+-   `PetugasLogin` : middleare untuk login petugas
+-   `AdminLogin` : middlware untuk login Admin
 
 ### Note
 
-- untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>
+-   untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>
 
 ### Color App
 
@@ -60,4 +62,4 @@ Putih kartu: #FFFFFF
 
 ### kelompok - 8
 
-- muhammad nadhar (230705083)
+-   muhammad nadhar (230705083)

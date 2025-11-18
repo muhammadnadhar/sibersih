@@ -7,7 +7,8 @@
                 <h3 class="text-center mb-4" style="color: #1E293B; font-weight: 700;">User Register</h3>
 
 
-                <form>
+                <form action="{{ route('user.sign-up.post') }}" method="POST">
+                    @csrf
                     <div class="mb-3">
                         <label class="form-label" style="color: #1E293B;">Nama Lengkap</label>
                         <input type="text" class="form-control"

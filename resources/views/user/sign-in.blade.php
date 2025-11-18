@@ -1,4 +1,4 @@
-<x-layout-user :title="'Login'" isSidebar="false">
+<x-layout-user :title="'Login'">
 
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="card shadow" style="width: 380px; background-color: #FFFFFF; border-radius: 16px;">
@@ -22,7 +22,8 @@
 
 
                     <button type="submit" class="btn w-100 mt-2"
-                        style="background-color: #2B68FF; color: white; border-radius: 10px;">Sign In</button>
+                        style="background-color: #2B68FF; color: white; border-radius: 10px;"><a
+                            href="{{ route('user.sign-up') }}"></a></button>
 
 
                     <div class="mt-3 text-center">
