@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('admin', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // local key untuk petuas dan users terhubung
+
             $table->string("username");
             $table->string("password");
             $table->string("email")->unique();

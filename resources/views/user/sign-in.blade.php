@@ -1,4 +1,4 @@
-<x-layout-user :title="Login">
+<x-layout-user :title="'Login'" isSidebar="false">
 
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="card shadow" style="width: 380px; background-color: #FFFFFF; border-radius: 16px;">

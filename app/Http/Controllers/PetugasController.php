@@ -9,17 +9,21 @@ use Illuminate\Support\Facades\Hash;
 class PetugasController extends Controller
 {
     //halaman utama
-    public function petugas()
+    public function dashboard()
     {
-        return view("petugas.petugas");
+        return view("petugas.dashboard");
+    }
+    public function profile()
+    {
+        return view("petugas.profile");
     }
 
-    public function SignInViews()
+    public function signInViews()
     {
         return View("petugas.sign-in");
     }
 
-    public function SignInPost(Request $request)
+    public function signInPost(Request $request)
     {
         $name = $request->input('username');
         $password = $request->input('password');
@@ -27,8 +31,8 @@ class PetugasController extends Controller
         if ($name &&   Hash::check($password, $name->password)) {
 
             // Login berhasil
-            Auth::login($name); // Login kan Usernya
-            return redirect()->route("petugas.")->with("success", "Selamat datang, $name!");
+            Auth::guard("petugas")->login($name); // Login kan Petugasnya
+            return redirect()->route("petugas.dashboard")->with("success", "Selamat datang, $name!");
         } else {
             // Jika user tidak ditemukan, lakukan sesuatu
             return redirect()->back()->with("error", "Login gagal. Periksa username dan password Anda.");

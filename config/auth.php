@@ -48,6 +48,7 @@ return [
         'petugas'=> [
             'driver' => 'session',
             'provider' => 'petugases',
+        ]
     ],
 
     /*
@@ -78,7 +79,7 @@ return [
         ],
         'petugases' => [
             'driver' => 'eloquent',
-            'model' => App\Models\petugas::class, ,
+            'model' => App\Models\petugas::class,
         ],
 
         // 'users' => [

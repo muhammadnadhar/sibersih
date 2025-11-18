@@ -42,4 +42,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    /*
+    * User punya relasi dari Admin
+    */
+    public function Admin()
+    {
+        $this->belongsTo(Admin::class);
+    }
 }

@@ -16,6 +16,11 @@ return new class extends Migration
             $table->string("username");
             $table->string("password");
             $table->string("email")->unique();
+
+            // forend key ke admin
+            $table->unsignedBigInteger('petugas_id');
+            $table->foreign('petugas_id')->references('id')->on('admin')->onDelete('cascade');
+
             $table->string("telepon")->nullable();
             $table->json("report_success")->nullable();   // simpna laporan yang sudah di siapin
             $table->json("report_pandding")->nullable();

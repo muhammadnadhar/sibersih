@@ -5,20 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Spatie\FlareClient\View;
 
 class UserController extends Controller
 {
-    public function Dashboard()
+    public function dashboard()
     {
         return view("user.dashboard");
     }
+    // halaman profile User
+    public function profile()
+    {
+        return view("user.profile");
+    }
 
-    public function SignInViews()
+    public function signInViews()
     {
         return View("user.sign-in");
     }
-    public function SignInPost(Request $request)
+    public function signInPost(Request $request)
     {
 
         $name = $request->input('username');

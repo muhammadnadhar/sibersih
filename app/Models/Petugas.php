@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class petugas extends Model
+class Petugas extends Model
 {
     use HasFactory;
 

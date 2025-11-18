@@ -15,6 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+
+            // foreign key ke admin
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('admin')->onDelete('cascade');
+
             $table->json("report_success")->nullable(); // report yang succes di lakukan oleh user
             $table->json("report_pandding")->nullable(); // report yang masih menunggu
             $table->timestamp('email_verified_at')->nullable();
