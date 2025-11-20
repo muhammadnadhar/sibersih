@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <style>
-        :root {
+        /* :root {
             --color-teks-utama: #1E293B;
             --color-biru-sidebar: #2B68FF;
             --color-hijau-sukses: #34D399;
@@ -22,6 +22,63 @@
             --color-merah-urgent: #F87171;
             --color-abu-bg: #F8FAFC;
             --color-putih-kartu: #FFFFFF;
+        } */
+
+        #color-teks-utama {
+            color: #1E293B;
+        }
+
+        #color-biru-sidebar {
+            color: #2B68FF;
+        }
+
+        #color-hijau-sukses {
+            color: #34D399;
+        }
+
+        #color-kuning-proses {
+            color: #FBBF24;
+        }
+
+        #color-merah-urgent {
+            color: #F87171;
+        }
+
+        #color-abu-bg {
+            color: #F8FAFC;
+        }
+
+        #color-putih-kartu {
+            color: #FFFFFF;
+        }
+
+        /* BACKGROUND */
+        #bg-teks-utama {
+            background-color: #1E293B;
+        }
+
+        #bg-biru-sidebar {
+            background-color: #2B68FF;
+        }
+
+        #bg-hijau-sukses {
+            background-color: #34D399;
+        }
+
+        #bg-kuning-proses {
+            background-color: #FBBF24;
+        }
+
+        #bg-merah-urgent {
+            background-color: #F87171;
+        }
+
+        #bg-abu-bg {
+            background-color: #F8FAFC;
+        }
+
+        #bg-putih-kartu {
+            background-color: #FFFFFF;
         }
     </style>
 

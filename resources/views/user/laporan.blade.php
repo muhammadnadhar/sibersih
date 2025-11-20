@@ -10,6 +10,7 @@
 
             <div class="card-body">
 
+                {{-- nantik arahkan ke controler Laporan tapi menggunaka api.php --}}
                 <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 

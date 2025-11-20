@@ -61,4 +61,10 @@ class UserController extends Controller
             "email" => $email,
         ]);
     }
+
+    // untuk handle nya ada di  controller Laporan 
+    public function laporanView()
+    {
+        return view("user.laporan");
+    }
 }
