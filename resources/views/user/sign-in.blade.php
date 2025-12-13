@@ -27,7 +27,7 @@
 
 
                     <div class="mt-3 text-center">
-                        <small style="color: #2B68FF; cursor: pointer;">Belum punya akun? Register</small>
+                        <small style="color: #2B68FF; cursor: pointer;"><a href="{{ route('user.sign-up') }}">Belum punya akun? </a></small>
                     </div>
                 </form>
             </div>

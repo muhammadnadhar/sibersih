@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admin', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->id(); // local key untuk petuas dan users terhubung
 
             $table->string("username");
             $table->string("password");
             $table->string("email")->unique();
-            // admin punya penghubung ke petugas dan user
-            $table->foreignId("user_id")->references("id")->on("user")->onDelete("cascade");
-            $table->foreignId("petugas_id")->references("id")->on("petugas")->onDelete("cascade");
+            $table->string("invite_code"); // code grupe dari admin
+
             $table->timestamps();
         });
     }

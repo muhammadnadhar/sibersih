@@ -14,41 +14,35 @@
 1. laravel : framework php
 2. Boostrap : framework CSS
 3. bootstrap Icon : untuk Icon di project ini
-4. chart.js : library chart dari JS
-5. Mysql : untuk Database
-
-### kerja sama
-
-kalian **Fork** Repo ini ke repo kalian masing masing e , habis itu , clone ke local dan masuk aja ke branch masing masing :
-misal : git checkout -b masda , atau git checkout -b zada
-di sini kalian handle aja tugas kalian , habis itu kalian push aja ke repo yang di fork , nantik muncul notif di github **SIBERSIH**
-
-> pokoknya branch utama project ini ada di **main** , jadi kalau kalian udah siap dan pasti nantik aku aprove , untuk di masukan ke **main** project
+4. Mysql : untuk Database
+5. chart.js : library chart dari JS
+6. axios : untuk management Api di sisi Client
+7. alexpechkarev/google-maps : handle Api untuk Map
 
 ### controller || model || Route
 
 base controler **Utama**
 
--   UserControleer : untuk handle user Route
+- UserControleer : untuk handle user Route
     1. profile : handle untuk tampilan profile
     2. peta lokasi
     3. sign-in : handle untuk login
     4. sign-up : handle untuk reqister
     5. laporan : untk petugas dan user , dia menghandle di controller terpisah
--   PetugasControler : untuk handle petugas Route
--   AdminControler : untuk handle admin controller
+- PetugasControler : untuk handle petugas Route
+- AdminControler : untuk handle admin controller
 
 ### Middleware
 
 Ini middleware utama kami :
 
--   `UserLogin` : middleare untuk login
--   `PetugasLogin` : middleare untuk login petugas
--   `AdminLogin` : middlware untuk login Admin
+- `UserLogin` : middleare untuk pengecekan login user
+- `PetugasLogin` : middleare untuk pengecekan login petugas
+- `AdminLogin` : middlware untuk pengecekan login Admin
 
 ### Note
 
--   untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>
+- untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>
 
 ### Color App
 
@@ -62,4 +56,4 @@ Putih kartu: #FFFFFF
 
 ### kelompok - 8
 
--   muhammad nadhar (230705083)
+- muhammad nadhar (230705083)

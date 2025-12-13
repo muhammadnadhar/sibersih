@@ -14,35 +14,28 @@ return new class extends Migration
         Schema::create('laporan', function (Blueprint $table) {
             $table->id();
 
-            // pelapor
-            $table->unsignedBigInteger('user_id');
-
-            // admin yang mengelola laporan
-            $table->unsignedBigInteger('admin_id')->nullable();
-
-            // petugas yang akan menangani
-            $table->unsignedBigInteger('petugas_id')->nullable();
-
             $table->string('judul');
             $table->string('kategori');
             $table->text('deskripsi')->nullable();
-            $table->string('file');
+            $table->string("nama_pelapor");
 
-            // status proses laporan
-            $table->enum('status', ['pending', 'diproses', 'ditugaskan', 'selesai'])
+            $table->string('file_path');
+
+            $table->enum('status', ['pending', 'ditugaskan', 'selesai'])
                 ->default('pending');
 
-            // tambahan opsional
             $table->string('lokasi')->nullable();
-            $table->timestamp('tanggal_laporan')->nullable();
+            $table->timestamp('tanggal_laporan')->useCurrent();
+
+            // foreignId == foreign + on("id")
+            // Admin bisa menghapus laporan
+            $table->foreignId('admin_id')->nullable()->constrained('admins')->cascadeOnDelete();
+
+            // users & petugas set nullable
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('petugas_id')->nullable()->constrained('petugas')->nullOnDelete();
 
             $table->timestamps();
-
-            // foreign key
-            //onDelete('set null') digunakan pada foreign key (relasi tabel) agar ketika data induk dihapus, nilai foreign key di tabel anak akan di-set menjadi NULL
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('admin_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('petugas_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

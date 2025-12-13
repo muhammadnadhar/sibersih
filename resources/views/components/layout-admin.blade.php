@@ -1,4 +1,4 @@
-@props(['isSidebar' => false, 'admin' => null])
+@props(['isSidebar' => false, 'admin' => null, 'css' => false])
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,6 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'SIBERSIH' }}</title>
+
+    <!-- csss style include   -->
+    @if ($css)
+        @vite($css)
+    @endif
+
     {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -14,33 +20,23 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <style>
-        /* :root {
-            --color-teks-utama: #1E293B;
-            --color-biru-sidebar: #2B68FF;
-            --color-hijau-sukses: #34D399;
-            --color-kuning-proses: #FBBF24;
-            --color-merah-urgent: #F87171;
-            --color-abu-bg: #F8FAFC;
-            --color-putih-kartu: #FFFFFF;
-        } */
-
-        #color-teks-utama {
+        .cl-utama {
             color: #1E293B;
         }
 
-        #color-biru-sidebar {
+        .cl-sidebar {
             color: #2B68FF;
         }
 
-        #color-hijau-sukses {
+        .cl-sukses {
             color: #34D399;
         }
 
-        #color-kuning-proses {
+        .cl-proses {
             color: #FBBF24;
         }
 
-        #color-merah-urgent {
+        .cl-urgent {
             color: #F87171;
         }
 
@@ -48,36 +44,36 @@
             color: #F8FAFC;
         }
 
-        #color-putih-kartu {
+        .cl-kartu {
             color: #FFFFFF;
         }
 
         /* BACKGROUND */
-        #bg-teks-utama {
+        .bg-utama {
             background-color: #1E293B;
         }
 
-        #bg-biru-sidebar {
+        .bg-sidebar {
             background-color: #2B68FF;
         }
 
-        #bg-hijau-sukses {
+        .bg-sukses {
             background-color: #34D399;
         }
 
-        #bg-kuning-proses {
+        .bg-proses {
             background-color: #FBBF24;
         }
 
-        #bg-merah-urgent {
+        .bg-urgent {
             background-color: #F87171;
         }
 
-        #bg-abu-bg {
+        .bg-abu {
             background-color: #F8FAFC;
         }
 
-        #bg-putih-kartu {
+        .bg-kartu {
             background-color: #FFFFFF;
         }
     </style>
@@ -86,37 +82,121 @@
 
 <body>
 
-    <body class="d-flex">
-        @if ('isSidebar')
-            <!-- Sidebar start -->
-            <nav class="d-flex flex-column p-3"
-                style="width: 250px; min-height: 100vh; background: var(--color-biru-sidebar); color: white;">
-                <h3 class="text-white mb-4"><i class="bi bi-speedometer2 me-2"></i>Admin {{ $admin ?? '' }}</h3>
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item mb-2">
-                        <a href="#users" class="nav-link text-white"><i class="bi bi-people me-2"></i>Kelola Users</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a href="#petugas" class="nav-link text-white"><i class="bi bi-person-badge me-2"></i>Kelola
-                            Petugas</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a href="#laporan" class="nav-link text-white"><i
-                                class="bi bi-file-earmark-text me-2"></i>Laporan</a>
-                    </li>
-                </ul>
-            </nav>
-            <!-- Sidebar end -->
-        @endif
+    <!-- validasi popup untuk "success" | "error" | " info" start-->
+    @if (session('success'))
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 bg-sukses cl-kartu">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-semibold d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                            Berhasil
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body fs-6">
+                        {{ session('success') }}
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn bg-kartu fw-semibold" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if (session('info'))
+        <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 bg-sidebar cl-kartu">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-semibold d-flex align-items-center">
+                            <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                            Terjadi Kesalahan
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body fs-6">
+                        {{ session('info') }}
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn bg-kartu fw-semibold" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 bg-urgent cl-kartu">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-semibold d-flex align-items-center">
+                            <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                            Terjadi Kesalahan
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body fs-6">
+                        {{ session('error') }}
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn bg-kartu fw-semibold" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+        <!-- validasi popup untuk "success" | "error" | " info" start-->
 
-        {{ $slot }}
+        <body class="d-flex">
+            @if ($isSidebar)
+                <!-- Sidebar start -->
+                <nav class="d-flex flex-column p-3"
+                    style="width: 250px; min-height: 100vh; background: var(--color-biru-sidebar); color: white;">
+                    <h3 class="text-white mb-4"><i class="bi bi-speedometer2 me-2"></i>Admin {{ $admin ?? '' }}</h3>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item mb-2">
+                            <a href="#users" class="nav-link text-white"><i class="bi bi-people me-2"></i>Kelola
+                                Users</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="#petugas" class="nav-link text-white"><i class="bi bi-person-badge me-2"></i>Kelola
+                                Petugas</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="#laporan" class="nav-link text-white"><i
+                                    class="bi bi-file-earmark-text me-2"></i>Laporan</a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- Sidebar end -->
+            @endif
+
+            {{ $slot }}
 
 
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
-        </script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+            </script>
 
-    </body>
+
+            <script>
+                @if (session('success'))
+                    const successModal = new bootstrap.Modal('#successModal');
+                    successModal.show();
+                @endif
+
+                @if (session('info'))
+                    const errorModal = new bootstrap.Modal('#infoModal');
+                    errorModal.show();
+                @endif
+                @if (session('error'))
+                    const errorModal = new bootstrap.Modal('#errorModal');
+                    errorModal.show();
+                @endif
+            </script>
+
+        </body>
 
 </html>

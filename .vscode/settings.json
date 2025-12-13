@@ -1,4 +1,12 @@
 {
+    "editor.cursorSmoothCaretAnimation": "on",
+
+    // jetBranins Style
+    "workbench.colorTheme": "Jetbrains New Dark Theme",
+    "editor.fontSize": 13,
+    "workbench.iconTheme": "vscode-jetbrains-icon-theme-2023-dark",
+
+
     "[blade]": {
         // "format untuk blade formater "
         "editor.defaultFormatter": "shufo.vscode-blade-formatter",

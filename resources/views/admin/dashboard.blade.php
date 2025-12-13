@@ -10,9 +10,9 @@
             <div class="card shadow-sm mb-3" style="background: var(--color-putih-kartu);">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <h5 class="m-0">Daftar Users</h5>
-                    <button class="btn text-white" style="background: var(--color-hijau-sukses);">
-                        <i class="bi bi-plus-lg"></i> Tambah User
-                    </button>
+                    <!-- <button class="btn text-white" style="background: var(--color-hijau-sukses);"> -->
+                    <!--     <i class="bi bi-plus-lg"></i> Tambah User -->
+                    <!-- </button> -->
                 </div>
             </div>
 
@@ -22,7 +22,7 @@
                         <th>#</th>
                         <th>Nama</th>
                         <th>Email</th>
-                        {{-- <th>Status</th> --}}
+                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -73,63 +73,80 @@
                     <tr>
                         <th>#</th>
                         <th>Nama</th>
-                        <th>Role</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
+
+        @foreach ($petugas as $pt)
                     <tr>
-                        <td>1</td>
-                        <td>Budi</td>
-                        <td>Admin</td>
-                        <td><span class="badge" style="background: var(--color-biru-sidebar);">Aktif</span></td>
+
+                <a href="{{ route('admin.petugas.id',['id'=>$pt->id]) }}">
+                            <td>{{ $pt->id }}</td>
+                            </a>
+                        <td>{{ $pt->name}}</td>
+                        <td><span class="badge" style="background: var(--color-biru-sidebar);">{{ $pt->status }}</span></td>
                         <td>
-                            <button class="btn btn-sm btn-warning text-dark"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm text-white" style="background: var(--color-merah-urgent);"><i
-                                    class="bi bi-trash"></i></button>
+                            <!-- <button class="btn btn-sm btn-warning text-dark"><i class="bi bi-pencil"></i></button> -->
+                            untuk ifo petugas
+                            <button class="btn btn-sm text-white" style="background: var(--color-merah-urgent);">
+                                <a href="{{ route()}}">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                </a>
+                                </button>
                         </td>
                     </tr>
+@endforeach
                 </tbody>
             </table>
         </section>
 
-        <!-- LAPORAN -->
-        <section id="laporan">
-            <h3 class="mb-3">Laporan</h3>
-
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <div class="card p-3 shadow-sm" style="background: var(--color-putih-kartu);">
-                        <h5>User Baru</h5>
-                        <p class="mb-1">Hari ini: <span class="fw-bold"
-                                style="color: var(--color-hijau-sukses);">12</span></p>
-                        <p>Minggu ini: <span class="fw-bold" style="color: var(--color-kuning-proses);">58</span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card p-3 shadow-sm" style="background: var(--color-putih-kartu);">
-                        <h5>Laporan Masuk</h5>
-                        <p class="mb-1">Pending: <span class="fw-bold"
-                                style="color: var(--color-kuning-proses);">7</span></p>
-                        <p>Urgent: <span class="fw-bold" style="color: var(--color-merah-urgent);">3</span></p>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card p-3 shadow-sm" style="background: var(--color-putih-kartu);">
-                        <h5>Petugas Aktif</h5>
-                        <p class="mb-1">Total: <span class="fw-bold"
-                                style="color: var(--color-biru-sidebar);">15</span></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </div>
 
+
+    <!-- LAPORAN DATA start  -->
+
+    <div>
+        <h3>LAPORAN</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Pelapor</th>
+            <th>Petugas</th>
+            <th>Admin</th>
+            <th>Judul</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach ($laporan as $lp)
+                <a href="{{ route('admin.laporan.id',['id'=>$lp->id]) }}">
+                <tr>
+                            <td>{{ $lp->id }}</td>
+                        </a>
+
+            {{-- User (pelapor) --}}
+            <td>{{ $lp->user->name }}</td>
+
+            {{-- Petugas --}}
+            <td>{{ $lp->petugas->name ?? '-' }}</td>
+
+            {{-- Admin --}}
+            <td>{{ $lp->admin->name ?? '-' }}</td>
+
+            <td>{{ $lp->judul }}</td>
+                    <td>{{ $l->status }}</td>
+                    </tr>
+                </a>
+        @endforeach
+    </tbody>
+</table>
+    </div>
+
+    <!-- LAPORAN DATA and  -->
 
 
 </x-layout-admin>

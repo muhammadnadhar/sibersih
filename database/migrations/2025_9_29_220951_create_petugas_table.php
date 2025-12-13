@@ -18,12 +18,10 @@ return new class extends Migration
             $table->string("email")->unique();
 
             // forend key ke admin
-            $table->unsignedBigInteger('petugas_id');
-            $table->foreign('petugas_id')->references('id')->on('admin')->onDelete('cascade');
+            $table->unsignedBigInteger('admin_id');
+            $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
 
             $table->string("telepon")->nullable();
-            $table->json("report_success")->nullable();   // simpna laporan yang sudah di siapin
-            $table->json("report_pandding")->nullable();
             $table->timestamps();
         });
     }

@@ -16,12 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
 
-            // foreign key ke admin
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('admin')->onDelete('cascade');
+            $table->string("invite_code"); // code grupe dari admin
 
-            $table->json("report_success")->nullable(); // report yang succes di lakukan oleh user
-            $table->json("report_pandding")->nullable(); // report yang masih menunggu
+            // foreign key ke admin
+            $table->unsignedBigInteger('admin_id');
+            $table->foreign('admin_id')->references('id')->on('admins')->cascadeOnDelete(); //user dimiliki/dikelola oleh seorang admin.
+
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

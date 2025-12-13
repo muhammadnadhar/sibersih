@@ -1,0 +1,64 @@
+.container-index {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(43, 104, 255, 0.35),
+            transparent 60%
+        ),
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(52, 211, 153, 0.25),
+            transparent 70%
+        ),
+        radial-gradient(
+            circle at 20% 80%,
+            rgba(251, 191, 36, 0.25),
+            transparent 70%
+        ),
+        radial-gradient(
+            circle at 90% 85%,
+            rgba(248, 113, 113, 0.25),
+            transparent 65%
+        ),
+        linear-gradient(180deg, #1e293b 0%, #2b68ff 100%);
+    background-blend-mode: screen;
+    position: relative;
+}
+/* Style container index end */
+
+/* Animasi Card Hover */
+.card {
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+    transform-style: preserve-3d;
+    perspective: 800px;
+}
+
+/* Efek hover */
+.card:hover {
+    transform: scale(1.05) rotateX(8deg) rotateY(8deg);
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.25),
+        0 5px 15px rgba(43, 104, 255, 0.2);
+}
+
+/* Icon ikut animasi smooth */
+.card i {
+    transition: transform 0.4s ease;
+}
+
+.card:hover i {
+    transform: translateZ(20px);
+}
+
+/* Text ikut sedikit maju */
+.card h5 {
+    transition: transform 0.4s ease;
+}
+
+.card:hover h5 {
+    transform: translateZ(12px);
+}

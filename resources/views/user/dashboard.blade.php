@@ -1,15 +1,13 @@
-<x-layout-user  :title="'SIBERSIH'" :isNavbar="true">
-        <!-- Content -->
- <div class="container my-4">
+<x-layout-user  :title="'SIBERSIH'" :isNavbar="true" :css="resource/js/user/dahsboard.js">
 
-  <!-- Header -->
+ <div class="container my-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
     <div>
       <h3 class="fw-bold text-dark">Dashboard Pelaporan Sampah</h3>
       <p class="text-muted small mb-0">Selamat datang di sistem koordinasi kebersihan</p>
     </div>
     <div class="text-md-end mt-3 mt-md-0">
-      <span class="fw-semibold text-dark">User</span><br>
+      <span class="fw-semibold text-dark">{{ auth()->user()->name }}</span><br>
       <span class="text-muted small">Regular User</span>
     </div>
   </div>
@@ -19,7 +17,7 @@
       <div class="card shadow-sm border-0 rounded-4">
         <div class="card-body">
           <h6 class="text-secondary mb-1">Total Laporan</h6>
-          <h3 class="fw-bold text-primary mb-1">147</h3>
+          <h3 class="fw-bold text-primary mb-1"> {{ $total_laporan ?? "Kosong" }}</h3>
           <p class="text-success small mb-0">+12% dari minggu lalu</p>
         </div>
       </div>
@@ -29,7 +27,8 @@
       <div class="card shadow-sm border-0 rounded-4">
         <div class="card-body">
           <h6 class="text-secondary mb-1">Laporan Selesai</h6>
-          <h3 class="fw-bold text-success mb-1">89</h3>
+          <h3 class="fw-bold text-success mb-1">{{ $total_laporan_selesai ?? "Kosong" }}</h3>
+                        <!-- ini reward nya nantik simpan ke database -->
           <p class="text-success small mb-0">+8% dari minggu lalu</p>
         </div>
       </div>
@@ -125,52 +124,5 @@
 
 </div>
 
-
-  <!-- Chart.js Script -->
-  <script>
-    // Chart Mingguan
-    const ctx = document.getElementById('laporanChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-        datasets: [
-          {
-            label: 'Laporan Masuk',
-            data: [20, 15, 30, 28, 25, 20, 18],
-            borderColor: '#2B68FF',
-            tension: 0.3,
-            fill: false
-          },
-          {
-            label: 'Laporan Selesai',
-            data: [10, 12, 20, 22, 19, 15, 12],
-            borderColor: '#34D399',
-            tension: 0.3,
-            fill: false
-          }
-        ]
-      },
-      options: {
-        responsive: true
-      }
-    });
-
-    // Chart Status
-    const ctx2 = document.getElementById('statusChart').getContext('2d');
-    new Chart(ctx2, {
-      type: 'pie',
-      data: {
-        labels: ['Menunggu', 'Proses', 'Selesai'],
-        datasets: [{
-          data: [12, 25, 63],
-          backgroundColor: ['#F87171', '#FBBF24', '#34D399']
-        }]
-      },
-      options: {
-        responsive: true
-      }
-    });
-  </script>
 
 </x-layout-user>

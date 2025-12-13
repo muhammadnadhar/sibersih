@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Admin;
 use App\Models\User;
+use App\Models\Petugas;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,9 +21,9 @@ class LaporanFactory extends Factory
     {
         return [
             'user_id'       => User::inRandomOrder()->first()->id ?? User::factory(),
-            'admin_id'      => User::where('role', 'admin')->inRandomOrder()->first()->id ?? null,
-            'petugas_id'    => User::where('role', 'petugas')->inRandomOrder()->first()->id ?? null,
-
+            'admin_id'      => Admin::inRandomOrder()->first()->id ?? null,
+            'petugas_id'    => Petugas::inRandomOrder()->first()->id ?? null,
+            "nama_pengadu" => User::inRandomOrder()->first()->name ,
             'judul'         => $this->faker->sentence(4),
             'kategori'      => $this->faker->randomElement(['Kebersihan', 'Lingkungan', 'Fasilitas Umum', 'Keamanan']),
             'deskripsi'     => $this->faker->paragraph(3),
