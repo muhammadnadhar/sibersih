@@ -16,9 +16,12 @@ return new class extends Migration
 
             $table->string("username");
             $table->string("password");
+            $table->string("avatar")->nullable()->default("/image/default.webp"); // path Image
             $table->string("email")->unique();
             $table->string("invite_code"); // code grupe dari admin
 
+
+            $table->rememberToken();
             $table->timestamps();
         });
     }

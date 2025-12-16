@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('kategori');
             $table->text('deskripsi')->nullable();
             $table->string("nama_pelapor");
+            $table->string("nama_petugas")->nullable(); // di update sat di tugaskan oleh admin
 
-            $table->string('file_path');
+            $table->string('image_path');
 
             $table->enum('status', ['pending', 'ditugaskan', 'selesai'])
                 ->default('pending');
@@ -29,11 +30,12 @@ return new class extends Migration
 
             // foreignId == foreign + on("id")
             // Admin bisa menghapus laporan
-            $table->foreignId('admin_id')->nullable()->constrained('admins')->cascadeOnDelete();
+            $table->foreignId('admin_id')->constrained('admins')->cascadeOnDelete();
 
-            // users & petugas set nullable
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('petugas_id')->nullable()->constrained('petugas')->nullOnDelete();
+            $table->unsignedBigInteger('petugas_id')->nullable();
+            $table->foreign('petugas_id')->references('id')->on('petugas')->nullOnDelete();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
 
             $table->timestamps();
         });

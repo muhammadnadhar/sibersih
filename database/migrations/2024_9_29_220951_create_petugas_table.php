@@ -17,11 +17,17 @@ return new class extends Migration
             $table->string("password");
             $table->string("email")->unique();
 
+            $table->string("avatar")->nullable()->default("/image/default.webp"); // path Image
+
             // forend key ke admin
             $table->unsignedBigInteger('admin_id');
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
 
             $table->string("telepon")->nullable();
+
+            $table->string("invite_code"); // code grupe dari admin
+
+            $table->rememberToken();
             $table->timestamps();
         });
     }

@@ -7,29 +7,27 @@ use App\Models\Laporan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
     // index
     public function dashboard()
     {
-        $admin_id = Auth::guard("admin")->user()->id;
-        // ambil user id yang login saat ini
-        $admin = Admin::with('users')->find($admin_id);
+        $admin_id = Auth::guard("admins")->user()->id;
         // Pagination user milik admin
-        $users = $admin->users()->paginate(5);
+        $users = Admin::with('users')->find($admin_id)->paginate(5);
 
-        // dapatkan jenis laporan ( untuk laporan user | sia pa admin | petugas)
-        $laporan  = Laporan::with(['user', 'admin', 'petugas'])->latest()->get();
+        // dapatkan jenis laporan
+        $laporan  = Laporan::with(['admin',"petugas","user"])->latest()->get();
 
         $petugas = Admin::with("petugas")->find(id: $admin_id)->latest()->get();
-
 
         return view("admin.dashboard", compact("users", "admin", "laporan", 'petugas'));
     }
     public function profile()
     {
-        $admin = auth()->guard("admin")->user();
+        $admin = auth()->guard("admins")->user();
         return view("admin.profile", compact("admin"));
     }
 
@@ -38,7 +36,7 @@ class AdminController extends Controller
     {
         $id = $request->query("id");
         // ambil data petugas dan user{
-        $laporan_id  = Laporan::with(["user", "petugas"])->findOrFail(id: $id); // jika gagal 404
+        $laporan_id  = Laporan::with(["users", "petugas"])->findOrFail(id: $id); // jika gagal 404
 
         return view("admin.laporan-id", ['laporan_id' => $laporan_id]);
     }
@@ -52,12 +50,12 @@ class AdminController extends Controller
     public function signInPost(Request $request)
     {
         $request->validate([
-            'username'     => 'required',
-            'password' => 'required'
+            'username' => 'required|string|min:3|max:30',
+            'password' => 'required|string|min:6'
         ]);
 
-        $cridentia = $request->only("username", "password");
-        if (Auth::guard("admin")->attempt($cridentia)) {
+        $cridentias = $request->only("username", "password");
+        if (Auth::guard("admins")->attempt($cridentias)) {
             $request->session()->regenerate(); // CEGAH session fixation
             return redirect()->route('admin.dashboard')->with("info", "welcome admin");
         }
@@ -70,29 +68,30 @@ class AdminController extends Controller
     public function signUpPost(Request $request)
 
     {
-        $validated = $request->validate([
-            'username' => 'required|min:3|max:30|unique:users,username',
-            'email'    => 'required|email|unique:petugas,email',
+        $validated = validator::make($request->all(), [
+            'username' => 'required|min:3|max:30',
+            'email'    => 'required|email|unique:admins,email',
             'password' => 'required|min:6',
+            'invite_code' => 'required|string',
+            'password_confirmation' => 'required|same:password',
         ]);
 
-        /* if ($validated->p->fails()) { */
-        /*     // Tangani error validasi di sini */
-        /*     return redirect()->back()->withErrors($validator)->withInput(); */
-        /* } */
+        if ($validated->fails()) {  // otomatis di tangani oleh Laravel
+            // Tangani error validasi di sini */
+            return redirect()->back()->with("warning", "Validasi gagal. Silahkan periksa kembali input Anda.")->withErrors($validated)->withInput();
+        }
 
         // jika admin sudah lagin
         if (auth()->guard("admin")->check()) {
             return redirect()->route("admin.dashboard")->with("success", "kamu sudah login admin");
         }
 
-        // simpan ke database
+        $data = $validated->validated(); // ambil data yang sudah tervalidasi
         Admin::create([
-            "username" =>  $validated["username"],
-            // password simpan dalam bentuk hash
-            "password" => Hash::make($validated["password"]),
-            "invite_code" => $validated['invide_code'],
-            "email" => $validated["email"],
+            'username'    => $data['username'],
+            'email'       => $data['email'],
+            'password'    => Hash::make($data['password']),
+            'invite_code' => "SBR-" . $data['invite_code'],
         ]);
         // kami maunya admin harus validasi kembali jika memang sudha register
         return  redirect()->route("admin.sign-in")->with("info", "accoun di buat , silahkan login ");
@@ -113,7 +112,7 @@ class AdminController extends Controller
         $admin_id = auth()->guard("admin")->user()->id;
         $petugas_id = $request->query("id");
 
-        // update laporan ke katagory di tugaskan dan tambahkan id petugas 
+        // update laporan ke katagory di tugaskan dan tambahkan id petugas
         $laporan = Laporan::where("admin_id", $admin_id)->first();
 
         if ($laporan) {

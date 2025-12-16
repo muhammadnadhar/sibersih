@@ -18,19 +18,19 @@ class Laporan extends Model
         'judul',
         'kategori',
         'deskripsi',
-        'file_path',
+        'image',
         'status',
         'lokasi',
         'tanggal_laporan',
     ];
 
-    /**
-     * Pelapor
-     */
+    // /**
+    //  * Pelapor
+    //  */
     public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+     {
+         return $this->belongsTo(User::class, 'user_id');
+     }
 
     /**
      * Admin yang menangani laporan
@@ -40,11 +40,11 @@ class Laporan extends Model
         return $this->belongsTo(User::class, 'admin_id');
     }
 
-    /**
-     * Petugas yang ditugaskan
-     */
-    public function petugas()
-    {
-        return $this->belongsTo(User::class, 'petugas_id');
-    }
+    // /**
+    //  * Petugas yang ditugaskan
+    //  */
+     public function petugas()
+     {
+         return $this->belongsTo(User::class, 'petugas_id');
+     }
 }

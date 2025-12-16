@@ -36,6 +36,14 @@
                             style="border: 1px solid #1E293B33; border-radius: 8px;" placeholder="Ulangi password" />
                     </div>
 
+  <div class="mb-3">
+                        <label class="form-label cl-utama">Invite Code</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-abu cl-utama border-secondary">SBR-</span>
+                            <input type="text" name="invite_code" class="form-control border-secondary rounded-end"
+                                placeholder="Dapatkan dengan hubungi pihak pengelola" required>
+                        </div>
+                    </div>
 
                     <button type="submit" class="btn w-100 mt-2"
                         style="background-color: #34D399; color: white; border-radius: 10px;"><a

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Laporan;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Support\Facades\Auth;
 
 class LaporanController extends Controller
 {
@@ -16,33 +16,37 @@ class LaporanController extends Controller
      */
     public function userLaporan(Request $request)
     {
-        // Validasi input
-        $request->validate([
+        $validated  = Validator::make($request->all() ,[
             'judul'        => 'required|string|max:255',
             'kategori'     => 'required|string',
             'deskripsi'    => 'required|string',
-            'file_laporan' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5000',
+            'image_laporan' => 'required|file|mimes:jpg,jpeg,png|max:5000',
         ]);
+
+        if ($validated->fails()){
+            return redirect()->back()->with("warning", "Validasi gagal. Silahkan periksa kembali input Anda.")->withErrors($validated)->withInput();
+        }
+
         // Upload file
-        $file = $request->file('file_laporan');
-        $namaFile = time() . '_' . $file->getClientOriginalName();
+        $image = $request->file('image_laporan');
+        $namaImage = time() . '_' . $image->getClientOriginalName();
 
         // Simpan file ke storage/app/public/laporan
-        $file->storeAs('laporan', $namaFile, 'public');
+        $image->storeAs('laporan', $namaImage, 'public');
 
         $user = auth()->user();
 
-        // petugas_id di atur admin nantik , karena yang mengelola laporanya
-        // admin antara siapa yang menerima tugasnya 
+        $data = $validated->validate();
+        // admin antara siapa yang menerima tugasnya
         Laporan::create([
-            'judul'     => $request->judul,
-            'kategori'  => $request->kategori,
-            'deskripsi' => $request->deskripsi,
-            'file'      => $namaFile,
+            'judul'     => $data["judul"],
+            'kategori'  => $data['kategori'],
+            'deskripsi' => $data['deskripsi'],
+            'image_path'      => $namaImage,
             "nama_pelapor" => $user->name,
             'admin_id' => $user->admin_id, // admin yang menegola user ambil berdasarkan id dari data user yg login
-            'user_id'   => $user->id,
-            'lokasi'    => $request->lokasi, // jika ada
+             'user_id'   => $user->id,
+            'lokasi'    => $data['lokasi'], // jika ada
             'tanggal_laporan' => now(),      // opsional
             'status'    => 'pending',        // default
         ]);

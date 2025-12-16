@@ -18,8 +18,8 @@ class PetugasLogin
     {
 
         // Jika admin login → tolak
-        if (Auth::guard('admin')->check()) {
-            $admin = Auth::guard('admin')->user();
+        if (Auth::guard('admins')->check()) {
+            $admin = Auth::guard('admins')->user();
             return redirect()->route('admin.dashboard')
                 ->with('error', 'Kamu admin, bukan petugas (' . $admin->name . ')');
         }

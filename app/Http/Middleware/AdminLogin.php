@@ -24,11 +24,11 @@ class AdminLogin
         if (Auth::guard('petugas')->check()) {
             $petugas = Auth::guard('petugas')->user();
             return redirect()->route('petugas.dashboard')
-                ->with('error', 'Kamu petugas, bukan petugas (' . $petugas->name . ')');
+                ->with('error', 'Kamu petugas, bukan petugas (' . $petugas->username . ')');
         }
 
         // Jika petugas BELUM login → tolak
-        if (!Auth::guard('admin')->check()) {
+        if (!Auth::guard('admins')->check()) {
             return redirect()->route('admin.sign-in')
                 ->with('error', 'Kamu harus login sebagai admin');
         }

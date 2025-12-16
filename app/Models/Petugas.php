@@ -12,12 +12,13 @@ use Illuminate\Notifications\Notifiable;
 class Petugas extends Authenticatable
 {
     use HasFactory, Notifiable;
-    protected $table = "Petugas";
+    protected $table = "petugas";
 
 
     protected $fillable = [
         'username',
-        'password'
+        'password',
+        'email',
     ];
 
     protected $hidden = [
@@ -31,5 +32,8 @@ class Petugas extends Authenticatable
     public function Admin()
     {
         return $this->belongsTo(Admin::class);
+    }
+     public function laporan() {
+        return $this->hasMany(Laporan::class);
     }
 }

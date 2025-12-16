@@ -18,7 +18,9 @@ class Admin extends Authenticatable
 
     protected $fillable = [
         'username',
-        'password'
+        'email',
+        'password',
+        'invite_code',
     ];
 
     protected $hidden = [
@@ -31,13 +33,13 @@ class Admin extends Authenticatable
     */
     public function petugas()
     {
-        return $this->hasMany(Petugas::class, "petugas_id", "id");
+        return $this->hasMany(Petugas::class, "admin_id", "id");
     }
     /*
     * admin punya hubungan ke user
     */
     public function users()
     {
-        return $this->hasMany(User::class, "user_id", "id");
+        return $this->hasMany(User::class, "admin_id", "id");
     }
 }

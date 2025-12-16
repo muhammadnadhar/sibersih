@@ -13,7 +13,6 @@
                 {{-- nantik arahkan ke controler Laporan tapi menggunaka api.php --}}
                 <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-
                     <!-- Judul -->
                     <div class="mb-3">
                         <label class="form-label fw-bold">
@@ -50,7 +49,7 @@
                         <label class="form-label fw-bold">
                             <i class="bi bi-upload"></i> Upload File / Gambar
                         </label>
-                        <input type="file" name="file_laporan" class="form-control" required>
+                        <input type="file" name="image_laporan" class="form-control" required>
                         <small class="text-muted">Format: JPG, PNG, PDF, DOCX</small>
                     </div>
 

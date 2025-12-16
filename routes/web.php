@@ -71,7 +71,7 @@ Route::prefix('admin')->controller(AdminController::class)->group(function () {
     Route::get('/sign-in', 'signInView')->name('admin.sign-in');
     Route::post('/sign-in', 'signInPost')->name('admin.sign-in.post');
     Route::get('/sign-up', 'signUpView')->name('admin.sign-up');
-    Route::post('/sign-up', 'signUpPost')->name('admin.sign-up.post');
+    Route::post('/sign-up', action: 'signUpPost')->name('admin.sign-up.post');
 });
 
 

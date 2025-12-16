@@ -92,6 +92,13 @@
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             <span>{{ session('info') }}</span>
         </div>
+      @endif
+
+  @if (session('warning'))
+        <div class="alert bg-proses cl-kartu border-0 rounded-3 py-3 px-4 d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span>{{ session('info') }}</span>
+        </div>
     @endif
 
     @if (session('error'))

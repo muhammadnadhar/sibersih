@@ -1,4 +1,4 @@
-@props(['isSidebar' => false, 'isFooter' => false, 'title' => 'SIBERSIh','css' => false])
+@props(['isSidebar' => false, 'isFooter' => false, 'title' => 'SIBERSIh', 'css' => false])
 {{-- Layout utama App --}}
 
 <!DOCTYPE html>
@@ -7,12 +7,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ $title ?? 'SIBERSIH' }}</title>
+    <title>{{ $title ?? 'SIBERSIH' }}</title>
 
- <!-- csss style include   -->
-        @if($css)
-@vite('resources/css/base/index.css')
-        @endif
+    <!-- csss style include   -->
+    @if ($css)
+        @vite($css)
+    @endif
 
     {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -87,32 +87,38 @@
         .bg-kartu {
             background-color: #FFFFFF;
         }
-
-
     </style>
 </head>
 
 <body>
 
-@if (session('success'))
-<div class="alert bg-sukses cl-kartu border-0 rounded-3 py-3 px-4 d-flex align-items-center">
-    <i class="bi bi-check-circle-fill me-2"></i>
-    <span>{{ session('success') }}</span>
-</div>
-@endif
-        @if (session('info'))
+    @if (session('success'))
+        <div class="alert bg-sukses cl-kartu border-0 rounded-3 py-3 px-4 d-flex align-items-center">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span>{{ session('success') }}</span>
+        </div>
+    @endif
+    @if (session('info'))
         <div class="alert bg-sidebar cl-kartu border-0 rounded-3 py-3 px-4 d-flex align-items-center">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             <span>{{ session('info') }}</span>
         </div>
-        @endif
+    @endif
 
-@if (session('error'))
-<div class="alert bg-urgent cl-kartu border-0 rounded-3 py-3 px-4 d-flex align-items-center">
-    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    <span>{{ session('error') }}</span>
-</div>
-        @endif
+
+          @if (session('warning'))
+        <div class="alert bg-proses cl-kartu border-0 rounded-3 py-3 px-4 d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span>{{ session('info') }}</span>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert bg-urgent cl-kartu border-0 rounded-3 py-3 px-4 d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span>{{ session('error') }}</span>
+        </div>
+    @endif
 
     <main class="d-md-flex gap-1">
 
@@ -134,14 +140,16 @@
                 <ul class="navbar-nav d-flex justify-content-around w-100 text-center small">
 
                     <li class="nav-item">
-                        <a href="{{ route('petugas.dashboard') }}" class="nav-link text-white d-flex flex-column align-items-center">
+                        <a href="{{ route('petugas.dashboard') }}"
+                            class="nav-link text-white d-flex flex-column align-items-center">
                             <i class="bi bi-speedometer2 fs-5"></i>
                             Dashboard
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('petugas.laporan') }}" class="nav-link text-white d-flex flex-column align-items-center">
+                        <a href="{{ route('petugas.laporan') }}"
+                            class="nav-link text-white d-flex flex-column align-items-center">
                             <i class="bi bi-file-earmark-text fs-5"></i>
                             Laporan
                         </a>
@@ -210,8 +218,8 @@
             </nav>
         @endif
 
-            {{ $slot }}
-            <!-- Slot utama, isi halaman atau isi di dalamnya -->
+        {{ $slot }}
+        <!-- Slot utama, isi halaman atau isi di dalamnya -->
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"

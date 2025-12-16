@@ -6,20 +6,29 @@
                 <h3 class="text-center mb-4" style="color: #1E293B; font-weight: 700;">User Sign In</h3>
 
 
-                <form>
+                <form action="{{ route('user.sign-in.post') }}" method="POST">
+                    @csrf
                     <div class="mb-3">
-                        <label class="form-label" style="color: #1E293B;">Username</label>
-                        <input type="text" name="username" class="form-control"
-                            style="border: 1px solid #1E293B33; border-radius: 8px;" placeholder="Masukkan email" />
+                        <label for="username" class="form-label cl-utama">Username</label>
+                        <input type="text" id="username" name="username"
+                            class="form-control rounded-2 border-secondary @error('username') is-invalid @enderror"
+                            placeholder="Masukkan username" value="{{ old('username') }}" required minlength="3"
+                            maxlength="30" />
+                        @error('username')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
 
 
                     <div class="mb-3">
-                        <label class="form-label" style="color: #1E293B;">Password</label>
-                        <input type="password" name="password" class="form-control"
-                            style="border: 1px solid #1E293B33; border-radius: 8px;" placeholder="Masukkan password" />
+                        <label for="password" class="form-label cl-utama">Password</label>
+                        <input type="password" id="password" name="password"
+                            class="form-control rounded-2 border-secondary @error('password') is-invalid @enderror"
+                            placeholder="Buat password" required minlength="6" />
+                        @error('password')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
-
 
                     <button type="submit" class="btn w-100 mt-2"
                         style="background-color: #2B68FF; color: white; border-radius: 10px;"><a
@@ -27,7 +36,8 @@
 
 
                     <div class="mt-3 text-center">
-                        <small style="color: #2B68FF; cursor: pointer;"><a href="{{ route('user.sign-up') }}">Belum punya akun? </a></small>
+                        <small style="color: #2B68FF; cursor: pointer;"><a href="{{ route('user.sign-up') }}">Belum
+                                punya akun? </a></small>
                     </div>
                 </form>
             </div>

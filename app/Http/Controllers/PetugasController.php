@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
+use App\Models\Laporan;
 use App\Models\Petugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +18,12 @@ class PetugasController extends Controller
     }
     public function profile()
     {
-        return view("petugas.profile");
+        $petugas_id = auth()->guard("petugas")->user()->id ;
+        $petugas = Petugas::find($petugas_id);
+
+        return view("petugas.profile")->with([
+            "petugas" => $petugas,
+        ]);
     }
 
     public function signInView()
@@ -50,24 +57,32 @@ class PetugasController extends Controller
     public function signUpPost(Request $request)
     {
         $validated = $request->validate([
-            'username' => 'required|min:3|max:30|unique:users,username',
+            'username' => 'required|min:3|max:30',
             'email'    => 'required|email|unique:petugas,email',
+            'invite_code' => 'required|string',
             'password' => 'required|min:6',
         ]);
-
         // auth() sama denagn Auth
+
         if (auth()->guard("petugas")->check()) {
             return redirect()->route("petugas.dashboard")->with("info", "selamat datang" . $request->input("username"));
         }
 
-        // cek bukan Admin atau petugas
+        if (!$validated) {
+            return redirect()->back()->with("error", "Validasi gagal. Silahkan periksa kembali input Anda.")->withErrors($validated)->withInput();
+        }
 
+
+        $admin_id = Admin::where("invite_code", $validated["invite_code"])->first()->id;
         // simpan ke database
         $petugas = Petugas::create([
             "username" =>  $validated["username"],
             // password simpan dalam bentuk hash
             "password" => Hash::make($validated["password"]),
             "email" => $validated['email'],
+
+            "admin_id" => $admin_id,
+            'invite_code' => "SBR-" . $validated["invite_code"],
         ]);
         auth()->guard("petugas")->login($petugas); // petugas auto login
 
@@ -77,7 +92,11 @@ class PetugasController extends Controller
 
     // untuk handle nya ada di  controller Laporan
     public function laporanView()
+
     {
-        return view("petugas.laporan");
+        $petugas = auth()->guard("petugas")->user();
+        $laporan_ditugaskan = Laporan::with("petugas")->find(id:$petugas->id)->where("status","ditugaskan")->get();
+
+        return view("petugas.laporan",compact("laporan_ditugaskan"));
     }
 }

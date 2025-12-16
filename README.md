@@ -40,6 +40,9 @@ Ini middleware utama kami :
 - `PetugasLogin` : middleare untuk pengecekan login petugas
 - `AdminLogin` : middlware untuk pengecekan login Admin
 
+### Database 
+> Ada sedikit masalah pada urutan migration yakni saat table petugas di buat , gagal atau terhalang dari table lain yang memiliki relasi dengan table petugas tersebut , solusi sekarang yaitu migrasi manual , tapi ini bukan solusi
+
 ### Note
 
 - untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>

@@ -41,13 +41,13 @@ return [
             'provider' => 'users',
         ],
         // Guard tambahan untuk Login Petugas dan Admin
-        'admin'=> [
+        'admins' => [
             'driver' => 'session',
             'provider' => 'admins',
         ],
-        'petugas'=> [
+        'petugas' => [
             'driver' => 'session',
-            'provider' => 'petugases',
+            'provider' => 'petugas',
         ]
     ],
 
@@ -75,11 +75,11 @@ return [
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\admin::class,
+            'model' => App\Models\Admin::class,
         ],
-        'petugases' => [
+        'petugas' => [
             'driver' => 'eloquent',
-            'model' => App\Models\petugas::class,
+            'model' => App\Models\Petugas::class,
         ],
 
         // 'users' => [

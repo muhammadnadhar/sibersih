@@ -6,32 +6,45 @@
             <div class="card-body p-4">
                 <h3 class="text-center mb-4" style="color: #1E293B; font-weight: 700;">User Sign In</h3>
 
-
-                <form>
-                    <div class="mb-3">
-                        <label class="form-label cl-utama ">Username</label>
-                        <input type="text" name="username" class="form-control"
-                            style="border: 1px solid #1E293B33; border-radius: 8px;" placeholder="Masukkan email" />
-                    </div>
-
+                <form action="{{ route('admin.sign-in') }}" method="POST">
+                    @csrf
 
                     <div class="mb-3">
-                        <label class="form-label" style="color: #1E293B;">Password</label>
-                        <input type="password" name="password" class="form-control"
-                            style="border: 1px solid #1E293B33; border-radius: 8px;" placeholder="Masukkan password" />
+                        <label for="username" class="form-label cl-utama">Username</label>
+                        <input type="text" id="username" name="username"
+                            class="form-control rounded-2 border-secondary @error('username') is-invalid @enderror"
+                            placeholder="Masukkan username" value="{{ old('username') }}" required minlength="3"
+                            maxlength="30" />
+                        @error('username')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
 
-
-                    <button type="submit" class="btn w-100 mt-2 bg-sidebar"
-                        style=" color: white; border-radius: 10px;"><a
-                            href="{{ route('petugas.sign-up') }}"></a></button>
-
-
-                    <div class="mt-3 text-center">
-                        <small style="color: #2B68FF; cursor: pointer;"><a href="{{ route('user.sign-up') }}">Belum
-                                punya akun? </a></small>
+                    <div class="mb-3">
+                        <label for="password" class="form-label cl-utama">Password</label>
+                        <input type="password" id="password" name="password"
+                            class="form-control rounded-2 border-secondary @error('password') is-invalid @enderror"
+                            placeholder="Buat password" required minlength="6" />
+                        @error('password')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-2 rounded-3 bg-sidebar">
+                        Login
+                    </button>
+
+                    <div class="mt-3 d-flex flex-column text-center">
+                        <small class="text-danger">*Hanya untuk Admin</small>
+
+                        <small>
+                            Belum punya akun?
+                            <a href="{{ route('admin.sign-up') }}" class="text-decoration-none">Register</a>
+                        </small>
+                    </div>
+
                 </form>
+
             </div>
         </div>
     </div>

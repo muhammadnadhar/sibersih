@@ -16,8 +16,8 @@ class UserController extends Controller
     public function dashboard()
     {
 
-        $user_id = auth()->user()->id;
-        $laporans = Laporan::with("user")->where("user_id", $user_id)->get();
+        $username = auth()->user()->name;
+        $laporans = Laporan::where("nama_pelapor", $username)->get();
 
         $total_laporan = $laporans->count();
         $laporan_selesai = $laporans->where("status", "selesai"); //adalah laporan succes bagia user
@@ -45,7 +45,7 @@ class UserController extends Controller
         $name = $request->input('username');
         $password = $request->input('password');
 
-        /* //  cara sebelumnya manual  */
+        /* // login cara sebelumnya manual  */
         /* if ($name &&  Hash::check($password, $name->password)) { */
         /**/
         /*     // Login berhasil */
@@ -55,6 +55,7 @@ class UserController extends Controller
         /*     // Jika user tidak ditemukan, lakukan sesuatu */
         /*     return redirect()->back()->with("error", "Login gagal. Periksa username dan password Anda."); */
         /* } */
+
         // otomatis login dan cek password dan name
         if (Auth::attempt(['name' => $name, 'password' => $password])) {
             $request->session()->regenerate(); // sesion
@@ -72,15 +73,19 @@ class UserController extends Controller
     {
 
         $validated = $request->validate([
-            'username' => 'required|min:3|max:30|unique:users,username',
-            'email'    => 'required|email|unique:users,email',
+            'username' => 'required|min:3|max:30',
+            'email'    => 'required|email|unique:users,email', // sesui dengan nama table dan isi field
             'password' => 'required|min:6',
+            'invite_code' => 'required|string',
         ]);
 
         // cek jika user sudah login
-
         if (Auth::check()) {
             return redirect()->route("user.dashboard")->with("info", "selamat datang" . $request->input("username"));
+        }
+
+        if (!$validated) {
+            return redirect()->back()->with("error", "Validasi gagal. Silahkan periksa kembali input Anda.")->withErrors($validated)->withInput();
         }
 
         // dapatkan id admin berdasarkan invite_code
@@ -93,6 +98,7 @@ class UserController extends Controller
             // password simpan dalam bentuk hash
             "password" => Hash::make($validated["password"]),
             "email" => $validated['email'],
+            'invite_code' => "SBR-" . $validated["invite_code"],
         ]);
         Auth::login($user); // user auto login
 
@@ -103,14 +109,19 @@ class UserController extends Controller
     // untuk handle nya ada di  controller Laporan
     public function laporanView()
     {
+        /* $laporan_users = $user->laporan()->with('user')->get(); */  // bisa juga , karena hasMay ke table Laporan
+        $laporan_selesai = Laporan::with("user")->where("status","selesai")->get();
         return view("user.laporan");
     }
 
     // history history terkait user
     public function historyView()
     {
-        $user = auth()->user()->name;
-        $laporan_users = Laporan::with(["user", "petugas"])->where("nama_pelapor", value: $user)->get();
+        $user = auth()->user();
+
+$laporan_users = Laporan::with('user')
+    ->where('user_id', $user->id)   // FK user_id
+    ->get();
 
         return view("user.history", compact("laporan_users"));
     }

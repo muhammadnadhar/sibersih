@@ -51,4 +51,8 @@ class User extends Authenticatable
     {
         $this->belongsTo(Admin::class);
     }
+
+     public function laporan() {
+        return $this->hasMany(Laporan::class);
+    }
 }

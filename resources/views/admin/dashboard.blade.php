@@ -1,75 +1,75 @@
-<x-layout-admin :isSidebar="true" :admin="$admin">
+<x-layout-admin :isSidebar="true" :admin="'admin | ' . $admin">
 
-    <!-- Content -->
     <div class="flex-grow-1 p-4">
 
-        <!-- USERS -->
+        {{-- USERS SECTION --}}
         <section id="users" class="mb-5">
-            <h3 class="mb-3">Kelola Users</h3>
+            <h3 class="mb-3 cl-utama">Kelola Users</h3>
 
-            <div class="card shadow-sm mb-3" style="background: var(--color-putih-kartu);">
+            {{-- Card Header --}}
+            <div class="card shadow-kartu mb-3 bg-kartu">
                 <div class="card-body d-flex justify-content-between align-items-center">
-                    <h5 class="m-0">Daftar Users</h5>
-                    <!-- <button class="btn text-white" style="background: var(--color-hijau-sukses);"> -->
-                    <!--     <i class="bi bi-plus-lg"></i> Tambah User -->
-                    <!-- </button> -->
+                    <h5 class="m-0 cl-utama">Daftar Users</h5>
+                    {{-- <button class="btn bg-sukses-hover text-white">
+                    <i class="bi bi-plus-lg"></i> Tambah User
+                </button> --}}
                 </div>
             </div>
 
+            {{-- Users Table --}}
             <table class="table table-bordered table-striped">
-                <thead style="background: var(--color-biru-sidebar); color: white;">
+                <thead class="bg-sidebar-gradient text-white">
                     <tr>
                         <th>#</th>
                         <th>Nama</th>
                         <th>Email</th>
-                         <th>Status</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-
                     @foreach ($users as $user)
                         <tr>
-                            {{-- fitur otomatis dari Blade untuk menampilkan nomor urut pada setiap baris @foreach. --}}
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
-                            {{-- <td>
-                                <span class="badge" style="background: var(--color-hijau-sukses);">
+                            <td>
+                                <span
+                                    class="badge {{ $user->status == 'Aktif' ? 'bg-sukses-gradient shadow-sukses' : 'bg-urgent-gradient shadow-urgent' }}">
                                     {{ $user->status ?? 'Aktif' }}
                                 </span>
-                            </td> --}}
+                            </td>
                             <td>
-                                <button class="btn btn-sm btn-warning text-dark">
+                                <button class="btn btn-sm btn-warning text-dark shadow-sm">
                                     <i class="bi bi-pencil"></i>
                                 </button>
-
-                                <button class="btn btn-sm text-white" style="background: var(--color-merah-urgent);">
+                                <button class="btn btn-sm bg-urgent-hover text-white shadow-sm">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </td>
                         </tr>
                     @endforeach
-
                 </tbody>
             </table>
         </section>
 
-        <!-- PETUGAS -->
+        {{-- PETUGAS SECTION --}}
         <section id="petugas" class="mb-5">
-            <h3 class="mb-3">Kelola Petugas</h3>
+            <h3 class="mb-3 cl-utama">Kelola Petugas</h3>
 
-            <div class="card shadow-sm mb-3" style="background: var(--color-putih-kartu);">
+            {{-- Card Header --}}
+            <div class="card shadow-kartu mb-3 bg-kartu">
                 <div class="card-body d-flex justify-content-between align-items-center">
-                    <h5 class="m-0">Daftar Petugas</h5>
-                    <button class="btn text-white" style="background: var(--color-hijau-sukses);">
+                    <h5 class="m-0 cl-utama">Daftar Petugas</h5>
+                    <button class="btn bg-sukses-hover text-white shadow-sm">
                         <i class="bi bi-plus-lg"></i> Tambah Petugas
                     </button>
                 </div>
             </div>
 
+            {{-- Petugas Table --}}
             <table class="table table-bordered table-striped">
-                <thead style="background: var(--color-biru-sidebar); color: white;">
+                <thead class="bg-sidebar-gradient text-white">
                     <tr>
                         <th>#</th>
                         <th>Nama</th>
@@ -78,75 +78,91 @@
                     </tr>
                 </thead>
                 <tbody>
-
-        @foreach ($petugas as $pt)
-                    <tr>
-
-                <a href="{{ route('admin.petugas.id',['id'=>$pt->id]) }}">
+                    @foreach ($petugas as $pt)
+                        <tr>
                             <td>{{ $pt->id }}</td>
-                            </a>
-                        <td>{{ $pt->name}}</td>
-                        <td><span class="badge" style="background: var(--color-biru-sidebar);">{{ $pt->status }}</span></td>
-                        <td>
-                            <!-- <button class="btn btn-sm btn-warning text-dark"><i class="bi bi-pencil"></i></button> -->
-                            untuk ifo petugas
-                            <button class="btn btn-sm text-white" style="background: var(--color-merah-urgent);">
-                                <a href="{{ route()}}">
+                            <td>{{ $pt->username }}</td>
+                            <td><span class="badge bg-sidebar-gradient shadow-sidebar">{{ $pt->status }}</span></td>
+                            <td>
+                                <a href="{{ route('admin.laporan.id', ['id' => $pt->id]) }}"
+                                    class="btn bg-utama-hover btn-sm text-white shadow-sm">
                                     <i class="bi bi-info-circle-fill"></i>
                                 </a>
-                                </button>
-                        </td>
-                    </tr>
-@endforeach
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </section>
 
-    </div>
+        {{-- LAPORAN SECTION --}}
+        <section id="laporan" class="mb-5">
+            <h3 class="mb-3 cl-utama">Laporan</h3>
 
-
-    <!-- LAPORAN DATA start  -->
-
-    <div>
-        <h3>LAPORAN</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Pelapor</th>
-            <th>Petugas</th>
-            <th>Admin</th>
-            <th>Judul</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach ($laporan as $lp)
-                <a href="{{ route('admin.laporan.id',['id'=>$lp->id]) }}">
-                <tr>
-                            <td>{{ $lp->id }}</td>
-                        </a>
-
-            {{-- User (pelapor) --}}
-            <td>{{ $lp->user->name }}</td>
-
-            {{-- Petugas --}}
-            <td>{{ $lp->petugas->name ?? '-' }}</td>
-
-            {{-- Admin --}}
-            <td>{{ $lp->admin->name ?? '-' }}</td>
-
-            <td>{{ $lp->judul }}</td>
-                    <td>{{ $l->status }}</td>
+            <table class="table table-bordered table-striped">
+                <thead class="bg-sidebar-gradient text-white">
+                    <tr>
+                        <th>ID</th>
+                        <th>Pelapor</th>
+                        <th>Petugas</th>
+                        <th>Admin</th>
+                        <th>Judul</th>
+                        <th>Status</th>
                     </tr>
-                </a>
-        @endforeach
-    </tbody>
-</table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach ($laporan as $lp)
+                        <tr>
+                            <td>{{ $lp->id }}</td>
+                            <td>{{ $lp->user->username }}</td>
+                            <td>{{ $lp->petugas->username ?? '-' }}</td>
+                            <td>{{ $lp->admin->username ?? '-' }}</td>
+                            <td>{{ $lp->judul }}</td>
+                            <td>
+                                <span
+                                    class="badge 
+                                {{ $lp->status == 'Selesai' ? 'bg-sukses-gradient shadow-sukses' : ($lp->status == 'Proses' ? 'bg-proses-gradient shadow-proses' : 'bg-urgent-gradient shadow-urgent') }}">
+                                    {{ $lp->status }}
+                                </span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
 
-    <!-- LAPORAN DATA and  -->
+        {{-- CHART SECTION --}}
+        <section id="charts" class="mb-5">
+            <h3 class="mb-3 cl-utama">Dashboard Charts</h3>
+
+            <div class="row g-3">
+                {{-- Chart kategori Users --}}
+                <div class="col-md-6">
+                    <div class="card shadow-kartu bg-kartu-gradient p-3">
+                        <h5 class="cl-utama">Users per Status</h5>
+                        <canvas id="chartUsers"></canvas>
+                    </div>
+                </div>
+
+                {{-- Chart kategori Laporan --}}
+                <div class="col-md-6">
+                    <div class="card shadow-kartu bg-kartu-gradient p-3">
+                        <h5 class="cl-utama">Laporan per Status</h5>
+                        <canvas id="chartLaporan"></canvas>
+                    </div>
+                </div>
+
+                {{-- Chart kategori Petugas --}}
+                <div class="col-md-12">
+                    <div class="card shadow-kartu bg-kartu-gradient p-3">
+                        <h5 class="cl-utama">Petugas Aktif</h5>
+                        <canvas id="chartPetugas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
 
 
 </x-layout-admin>
