@@ -6,7 +6,7 @@
             <div class="card-body p-4">
                 <h3 class="text-center mb-4" style="color: #1E293B; font-weight: 700;">User Sign In</h3>
 
-                <form action="{{ route('admin.sign-in') }}" method="POST">
+                <form action="{{ route('petugas.sign-in') }}" method="POST">
                     @csrf
 
                     <div class="mb-3">
@@ -35,11 +35,9 @@
                     </button>
 
                     <div class="mt-3 d-flex flex-column text-center">
-                        <small class="text-danger">*Hanya untuk Admin</small>
-
                         <small>
                             Belum punya akun?
-                            <a href="{{ route('admin.sign-up') }}" class="text-decoration-none">Register</a>
+                            <a href="{{ route('petugas.sign-up') }}" class="text-decoration-none">Register</a>
                         </small>
                     </div>
 

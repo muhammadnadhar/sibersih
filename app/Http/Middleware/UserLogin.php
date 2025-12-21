@@ -16,15 +16,24 @@ class UserLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // mafaatin Auth bawaan laravel
-        if (!Auth::check()) {
-            return redirect()->route("user.sign-in")->with("error", "Kamu login dulu");
+        // jika yang login adalah petugas
+        if (Auth::guard('petugas')->check()) {
+            $petugas = Auth::guard('petugas')->user();
+            return redirect()->route('petugas.dashboard')
+                ->with('info', 'Kamu petugas, bukan  user (' . $petugas->username . ')');
         }
-        // jika malah  petugas || admin yang login
-        if (Auth::guard("petugas")->check() || Auth::guard("admins")->check()) {
-            $who = Auth::guard("petugas")->user() ?? Auth::guard("admins")->user();
-            return redirect()->route("user.sign-in")->with("error", "kamu user bukan +" . $who->name);
+
+     // Jika admin  yang  → tolak
+        if (Auth::guard('admins')->check()) {
+            return redirect()->route('admin.dashboard')
+                ->with('info', 'kamu login sebagai admin');
         }
+
+        if(!Auth()->check()){
+            return redirect()->route("user.sign-in")->with("info","silakah login terlebih dahulu");
+        }
+
+
 
         return $next($request);
     }

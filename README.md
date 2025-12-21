@@ -23,29 +23,31 @@
 
 base controler **Utama**
 
-- UserControleer : untuk handle user Route
+-   UserControleer : untuk handle user Route
     1. profile : handle untuk tampilan profile
     2. peta lokasi
     3. sign-in : handle untuk login
     4. sign-up : handle untuk reqister
     5. laporan : untk petugas dan user , dia menghandle di controller terpisah
-- PetugasControler : untuk handle petugas Route
-- AdminControler : untuk handle admin controller
+-   PetugasControler : untuk handle petugas Route
+-   AdminControler : untuk handle admin controller
 
 ### Middleware
 
 Ini middleware utama kami :
 
-- `UserLogin` : middleare untuk pengecekan login user
-- `PetugasLogin` : middleare untuk pengecekan login petugas
-- `AdminLogin` : middlware untuk pengecekan login Admin
+-   `UserLogin` : middleare untuk pengecekan login user
+-   `PetugasLogin` : middleare untuk pengecekan login petugas
+-   `AdminLogin` : middlware untuk pengecekan login Admin
 
-### Database 
+### Database
+
 > Ada sedikit masalah pada urutan migration yakni saat table petugas di buat , gagal atau terhalang dari table lain yang memiliki relasi dengan table petugas tersebut , solusi sekarang yaitu migrasi manual , tapi ini bukan solusi
+> -> sudah fixed
 
 ### Note
 
-- untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>
+-   untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>
 
 ### Color App
 
@@ -59,4 +61,7 @@ Putih kartu: #FFFFFF
 
 ### kelompok - 8
 
-- muhammad nadhar (230705083)
+1. Muhammad Nadhar (230705083)
+2. Zada Rahmat Fauzie (230705145)
+3. Masda Alfarisi (230705136)
+4. Azhabul Firdaus (230705161)

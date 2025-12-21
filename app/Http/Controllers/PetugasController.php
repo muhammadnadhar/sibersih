@@ -16,10 +16,10 @@ class PetugasController extends Controller
     {
         return view("petugas.dashboard");
     }
-    public function profile()
+    public function profileView()
     {
-        $petugas_id = auth()->guard("petugas")->user()->id ;
-        $petugas = Petugas::find($petugas_id);
+        $petugas = auth()->guard("petugas")->user();
+
 
         return view("petugas.profile")->with([
             "petugas" => $petugas,
@@ -38,14 +38,14 @@ class PetugasController extends Controller
             'password' => 'required'
         ]);
 
-        $cridentials = $request->only("username", "password");
+        // $cridentials = $request->only("username", "password"); // sesuai nama table
 
-        if (Auth::attempt($cridentials)) {
+        if (Auth::attempt(['name' => $request->input('username'), 'password' => $request->input('password')])) {
 
             $request->session()->regenerate();
             return redirect()->route("petugas.dashboard")->with("info", "selamat datanag petugas" . $request->user()->name);
         } else {
-            return redirect()->back()->with("error", "nama dan password salah sialhkan login ualng ");
+            return redirect()->back()->with("error", "nama dan password salah atau tidak ada  sialhkan login ualng ");
         }
     }
 
@@ -72,11 +72,17 @@ class PetugasController extends Controller
             return redirect()->back()->with("error", "Validasi gagal. Silahkan periksa kembali input Anda.")->withErrors($validated)->withInput();
         }
 
+        $admin = Admin::where("invite_code", "SBR-" . $validated["invite_code"]);
+        $admin_id = $admin->pluck("id")->first();
+        $admin_code = $admin->pluck("invite_code")->first();
 
-        $admin_id = Admin::where("invite_code", $validated["invite_code"])->first()->id;
+
+        if (!$admin || $admin_code !== "SBR-" . $validated["invite_code"]) {
+            return redirect()->back()->with("warning", "Kode undangan tidak valid. Silahkan periksa kembali kode undangan Anda.")->withInput();
+        }
         // simpan ke database
         $petugas = Petugas::create([
-            "username" =>  $validated["username"],
+            "name" =>  $validated["username"],
             // password simpan dalam bentuk hash
             "password" => Hash::make($validated["password"]),
             "email" => $validated['email'],
@@ -90,13 +96,46 @@ class PetugasController extends Controller
             ->with('success', 'Akun berhasil dibuat!');
     }
 
+    public function logout(Request $request)
+    {
+
+        $username = auth()->guard("petugas")->user()->name;
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route("index")->with('info', 'Anda telah logout.' . $username);
+    }
+
     // untuk handle nya ada di  controller Laporan
     public function laporanView()
 
     {
         $petugas = auth()->guard("petugas")->user();
-        $laporan_ditugaskan = Laporan::with("petugas")->find(id:$petugas->id)->where("status","ditugaskan")->get();
+        $laporan_ditugaskan = Laporan::with("petugas")->find(id: $petugas->id)->where("status", "ditugaskan")->get();
 
-        return view("petugas.laporan",compact("laporan_ditugaskan"));
+        return view("petugas.laporan", compact("laporan_ditugaskan"));
+    }
+
+    public function historyView()
+    {
+        $petugas = auth()->guard("petugas")->user();
+        $laporan_selesai = Laporan::with("petugas")->find(id: $petugas->id)->where("status", "selesai")->get();
+
+        return view("petugas.history", compact("laporan_selesai"));
+    }
+    public function mapView()
+    {
+        // ini masih belum tau kenapa auto sugestion tidak mengenalinya , nantik di handle aja
+        // $response_map =    GoogleMaps::load('geocoding')
+        //     ->setParam([
+        //         'address' => 'Monas, Jakarta'
+        //     ])
+        //     ->get();
+
+
+        return view("petugas.peta-lokasi");
     }
 }

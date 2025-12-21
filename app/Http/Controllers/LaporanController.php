@@ -16,14 +16,15 @@ class LaporanController extends Controller
      */
     public function userLaporan(Request $request)
     {
-        $validated  = Validator::make($request->all() ,[
+        $validated  = Validator::make($request->all(), [
             'judul'        => 'required|string|max:255',
             'kategori'     => 'required|string',
             'deskripsi'    => 'required|string',
+            'lokasi' => 'required|string|max:255',
             'image_laporan' => 'required|file|mimes:jpg,jpeg,png|max:5000',
         ]);
 
-        if ($validated->fails()){
+        if ($validated->fails()) {
             return redirect()->back()->with("warning", "Validasi gagal. Silahkan periksa kembali input Anda.")->withErrors($validated)->withInput();
         }
 
@@ -42,51 +43,50 @@ class LaporanController extends Controller
             'judul'     => $data["judul"],
             'kategori'  => $data['kategori'],
             'deskripsi' => $data['deskripsi'],
-            'image_path'      => $namaImage,
+            'image_laporan'      => $namaImage,
             "nama_pelapor" => $user->name,
             'admin_id' => $user->admin_id, // admin yang menegola user ambil berdasarkan id dari data user yg login
-             'user_id'   => $user->id,
+            'user_id'   => $user->id,
             'lokasi'    => $data['lokasi'], // jika ada
-            'tanggal_laporan' => now(),      // opsional
+            'tanggal_laporan' => now(),
             'status'    => 'pending',        // default
         ]);
 
         // Redirect atau response JSON
         return redirect()->back()->with('success', 'Laporan berhasil dikirim!');
     }
-    public function petugasLaporan(Request $request,  $id)
+    public function petugasLaporan(Request $request, $id)
     {
         // Validasi request
         $request->validate([
             'status' => 'required|in:pending,diproses,ditugaskan,selesai',
-            'file_laporan' => 'nullable|file|max:2048', // boleh null, tapi kalau ada harus valid
+            'image_laporan_success' => 'nullable|file|max:2048', // boleh null, tapi kalau ada harus valid
         ]);
 
         $petugas = auth()->guard("petugas")->user();
 
-        // Ambil laporan
+        // cari laporan berdasarkan id "laporan"
         $laporan = Laporan::findOrFail($id);
 
         // Jika ada file baru diupload
-        if ($request->hasFile('file_laporan')) {
+        if ($request->hasFile('image_laporan_success')) {
 
-            // 1. Hapus file lama bila ada
-            if ($laporan->file && file_exists(public_path('uploads/laporan/' . $laporan->file))) {
-                unlink(public_path('uploads/laporan/' . $laporan->file));
-            }
+            //  Hapus file lama bila ada ( tidak di perluakn , )
+            // if ($laporan->file && file_exists(public_path('uploads/laporan/' . $laporan->file))) {
+            //     unlink(public_path('uploads/laporan/' . $laporan->file));
+            // }
 
-            // 2. Upload file baru
-            $file = $request->file('file_laporan');
+            // Upload file baru | yang di mana sampah sudah di bersihkan
+            $file = $request->file('image_laporan_success');
             $namaFile = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/laporan'), $namaFile);
+            $file->move(public_path('laporan-selesai'), $namaFile);
 
-            // 3. Update nama file di database
-            $laporan->file = $namaFile;
+            // Simpan nama file baru ke database
+            $laporan->image_laporan_selesai = $namaFile;
         }
 
         // Update status & petugas
         $laporan->status = $request->status;
-        $laporan->petugas_id = $petugas->id;
 
         $laporan->save();
 

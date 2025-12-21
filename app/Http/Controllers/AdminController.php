@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Laporan;
+use App\Models\Petugas;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,22 +16,32 @@ class AdminController extends Controller
     // index
     public function dashboard()
     {
-        $admin_id = Auth::guard("admins")->user()->id;
-        // Pagination user milik admin
-        $users = Admin::with('users')->find($admin_id)->paginate(5);
+        $admin = Auth::guard("admins")->user();
+
+        // entah kenapa tidak di dapat users yang spesifik dengan relatioin
+        /* $users = Admin::with('users')->where('invite_code',$admin->invite_code)->latest()->get(); */
+        $users = User::where("invite_code", $admin->invite_code)->paginate(5); //dari table user langsung
 
         // dapatkan jenis laporan
-        $laporan  = Laporan::with(['admin',"petugas","user"])->latest()->get();
+        $laporan  = Laporan::with(['admin', "petugas", "user"])->latest()->get();
 
-        $petugas = Admin::with("petugas")->find(id: $admin_id)->latest()->get();
+        // entah kenapa tidak di dapat users yang spesifik dengan relatioin
+        /* $petugas = Admin::with("petugas")->where('invite_code',$admin->invite_code)->latest()->get(); */
+        $petugas = Petugas::where("invite_code", $admin->invite_code)->paginate(5);
 
         return view("admin.dashboard", compact("users", "admin", "laporan", 'petugas'));
     }
-    public function profile()
+    public function profileView()
     {
         $admin = auth()->guard("admins")->user();
         return view("admin.profile", compact("admin"));
     }
+    public function profileEditView()
+    {
+
+        return view('admin.profile-edit');
+    }
+    public function passwordUpdatePut() {}
 
 
     public function laporanId(Request $request)
@@ -82,7 +94,7 @@ class AdminController extends Controller
         }
 
         // jika admin sudah lagin
-        if (auth()->guard("admin")->check()) {
+        if (auth()->guard("admins")->check()) {
             return redirect()->route("admin.dashboard")->with("success", "kamu sudah login admin");
         }
 
@@ -96,6 +108,21 @@ class AdminController extends Controller
         // kami maunya admin harus validasi kembali jika memang sudha register
         return  redirect()->route("admin.sign-in")->with("info", "accoun di buat , silahkan login ");
     }
+    public function logout(Request $request)
+    {
+
+        $username = auth()->guard('admins')->user()->name;
+        if (!$username) {
+            return redirect()->back()->with("warning", "kamu bukan admins ");
+        }
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route("index")->with('info', $username . " admin telah logout");
+    }
+
 
     public function petugasIdView(Request $request)
     {

@@ -57,7 +57,7 @@
                         <div class="input-group">
                             <span class="input-group-text bg-abu cl-utama border-secondary">SBR-</span>
                             <input type="text" name="invite_code" class="form-control border-secondary rounded-end"
-                                placeholder="Dapatkan dengan hubungi pihak pengelola" required>
+                                placeholder="masukan masukan code Grupe anda" required>
                             @error('invite_code')
                                 <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror

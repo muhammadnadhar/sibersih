@@ -1,4 +1,155 @@
-<x-layout-petugas>
+<x-layout-petugas :title="'Profile |' . $petugas->username" :isSidebar="true">
 
-    <h3>Petugas profile</h3>
+    {{-- PROFILE PAGE - PETUGAS --}}
+    <section class="container-fluid bg-abu py-4">
+
+        {{-- Header --}}
+        <div class="mb-4">
+            <h4 class="fw-semibold cl-utama mb-1">
+                <i class="bi bi-person-badge-fill me-2 cl-proses"></i>
+                Profil Petugas
+            </h4>
+            <p class="text-muted small mb-0">
+                Informasi akun dan status operasional petugas
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+            {{-- LEFT PANEL : IDENTITY --}}
+            <div class="col-xl-3 col-lg-4">
+
+                <div class="bg-utama-gradient text-white rounded-4 shadow-utama p-4 h-100">
+
+                    <div class="text-center mb-4">
+                        <div class="mx-auto mb-2 rounded-circle bg-kartu shadow-kartu
+                                d-flex align-items-center justify-content-center"
+                            style="width:90px;height:90px;">
+                            <i class="bi bi-person-badge fs-1 cl-utama"></i>
+                        </div>
+
+                        <h6 class="fw-semibold mb-0">
+                            {{ $petugas->username ?? 'Nama Petugas' }}
+                        </h6>
+                        <span class="small opacity-75">
+                            Petugas Lapangan
+                        </span>
+                    </div>
+
+                    <hr class="opacity-25">
+
+                    <div class="small">
+
+                        <div class="mb-2 d-flex justify-content-between">
+                            <span class="opacity-75">ID Petugas</span>
+                            <strong>#PTG-001</strong>
+                        </div>
+
+                        <div class="mb-2 d-flex justify-content-between">
+                            <span class="opacity-75">Unit</span>
+                            <strong>Lapangan</strong>
+                        </div>
+
+                        <div class="mb-2 d-flex justify-content-between">
+                            <span class="opacity-75">Status</span>
+                            <span class="badge bg-sukses-gradient shadow-sukses">
+                                Aktif
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- CENTER PANEL : DETAIL --}}
+            <div class="col-xl-6 col-lg-8">
+
+                <div class="bg-kartu rounded-4 shadow-kartu p-4 h-100">
+
+                    <h6 class="fw-semibold cl-utama mb-3">
+                        Data Petugas
+                    </h6>
+
+                    <div class="row g-3 small">
+
+                        <div class="col-md-6">
+                            <label class="text-muted mb-1">Nama Lengkap</label>
+                            <div class="p-2 bg-abu rounded-3">
+                                {{ $petugas->name ?? '-' }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="text-muted mb-1">Email</label>
+                            <div class="p-2 bg-abu rounded-3">
+                                {{ $petugas->email ?? '-' }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="text-muted mb-1">No. Telepon</label>
+                            <div class="p-2 bg-abu rounded-3">
+                                {{ $petugas->phone ?? '-' }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="text-muted mb-1">Hak Akses</label>
+                            <div class="p-2 bg-proses-gradient shadow-proses text-dark rounded-3">
+                                Petugas
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4 d-flex gap-2">
+                        <a href="#" class="btn bg-utama-hover text-white shadow-utama">
+                            <i class="bi bi-pencil-square me-1"></i>
+                            Edit Data
+                        </a>
+
+                        <a href="#" class="btn bg-proses-gradient shadow-proses text-dark">
+                            <i class="bi bi-shield-check me-1"></i>
+                            Verifikasi
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- RIGHT PANEL : STAT & PERFORMANCE --}}
+            <div class="col-xl-3">
+
+                <div class="bg-kartu rounded-4 shadow-kartu p-4 h-100">
+
+                    <h6 class="fw-semibold cl-utama mb-3">
+                        Statistik Tugas
+                    </h6>
+
+                    <div class="mb-3 p-3 rounded-3 bg-sukses-gradient text-white shadow-sukses">
+                        <div class="small opacity-75">Laporan Selesai</div>
+                        <div class="fs-4 fw-semibold">128</div>
+                    </div>
+
+                    <div class="mb-3 p-3 rounded-3 bg-proses-gradient text-dark shadow-proses">
+                        <div class="small opacity-75">Dalam Proses</div>
+                        <div class="fs-4 fw-semibold">7</div>
+                    </div>
+
+                    <div class="p-3 rounded-3 bg-urgent-gradient text-white shadow-urgent">
+                        <div class="small opacity-75">Urgent</div>
+                        <div class="fs-4 fw-semibold">2</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
 </x-layout-petugas>

@@ -1,4 +1,4 @@
-<x-layout-petugas>
+<x-layout-petugas :title="'update laporan'" :isSidebar="true">
     <div class="container mt-5">
 
         <div class="card shadow-sm">
@@ -9,7 +9,7 @@
 
             <div class="card-body">
 
-                @foreach ($laporan as $item)
+                @foreach ($laporan_ditugaskan as $item)
                     <div class="card mb-3" id="bg-putih-kartu">
                         <div class="card-body">
 
@@ -36,7 +36,7 @@
                             <p>
                                 <i class="bi bi-paperclip"></i>
                                 <strong>File:</strong>
-                                <a href="{{ asset('storage/laporan/' . $item->file) }}" target="_blank">
+                                <a href="{{ asset('laporan/' . $item->file) }}" target="_blank">
                                     {{ $item->file }}
                                 </a>
                             </p>
@@ -67,8 +67,9 @@
 
                             <hr>
 
-                            <!-- Tombol Update Status -->
-                            <form action="{{ route('petugas.updateStatus', $item->id) }}" method="POST"
+                            <!-- ini nantik di simpan di modal Boostrap  untuk di update Laporan yang di tugaskan terkait -->
+                            {{-- dapatkan id laporan dan kirim ke controller --}}
+                            <form action="{{ route('petugas.laporan.post', $item->id) }}" method="POST"
                                 class="d-flex gap-2">
                                 @csrf
                                 @method('PUT')
@@ -81,6 +82,17 @@
                                         Selesai
                                     </option>
                                 </select>
+
+                                <!-- Upload image -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="bi bi-upload"></i> Upload Gambar
+                                    </label>
+                                    <input type="file" name="image_laporan_success" class="form-control">
+                                    <small class="text-muted">Format: JPG, PNG, PDF</small>
+                                </div>
+
+
 
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-save-fill"></i> Update

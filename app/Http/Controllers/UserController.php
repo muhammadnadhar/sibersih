@@ -16,20 +16,25 @@ class UserController extends Controller
     public function dashboard()
     {
 
-        $username = auth()->user()->name;
-        $laporans = Laporan::where("nama_pelapor", $username)->get();
+        $user = auth()->user();
+        $laporans = Laporan::where("nama_pelapor", $user->username)->get();
 
         $total_laporan = $laporans->count();
         $laporan_selesai = $laporans->where("status", "selesai"); //adalah laporan succes bagia user
         $total_laporan_selesai = $laporan_selesai->count();
 
 
-        return view("user.dashboard", compact("total_laporan", "total_laporan_selesai"));
+        return view("user.dashboard", compact("user", "total_laporan", "total_laporan_selesai"));
     }
     // halaman profile User
-    public function profile()
+    public function profileView()
     {
-        return view("user.profile");
+        $user = auth()->user();
+
+        // tampilkan aktivitas dari table table user
+        $laporan_activity = Laporan::with("user")->where("user_id", $user->id)->latest()->get();
+
+        return view("user.profile", compact("user", "laporan_activity"));
     }
 
     public function signInView()
@@ -89,16 +94,21 @@ class UserController extends Controller
         }
 
         // dapatkan id admin berdasarkan invite_code
-        $admin_id = Admin::where("invite_code", $validated["invite_code"])->first()->id;
+        $admin = Admin::where("invite_code", 'SBR-' . $validated["invite_code"]);
+        $admin_id = $admin->pluck("id")->first(); // pluck untuk mengambil satu nilai saja
+        $admin_code = $admin->pluck("invite_code")->first();
+
+        if (!$admin || $admin_code !== "SBR-" . $validated["invite_code"]) {
+            return redirect()->back()->with("warning", "Kode undangan tidak valid. Silahkan periksa kembali input Anda.")->withInput();
+        }
 
         // simpan ke database
         $user = User::create([
-            "username" =>  $validated["username"],
+            "name" =>  $validated["username"],
             "admin_id" => $admin_id,
-            // password simpan dalam bentuk hash
             "password" => Hash::make($validated["password"]),
             "email" => $validated['email'],
-            'invite_code' => "SBR-" . $validated["invite_code"],
+            "invite_code" => "SBR-" . $validated["invite_code"],
         ]);
         Auth::login($user); // user auto login
 
@@ -106,11 +116,30 @@ class UserController extends Controller
             ->with('success', 'Akun berhasil dibuat!');
     }
 
+    public function logout(Request $request)
+    {
+
+        $username = auth()->user()->name;
+        if (!$username) {
+            return redirect()->back()->with("warning", "kamu bukan user ");
+        }
+
+        Auth::logout();
+
+        $request->session()->regenerateToken();
+        $request->session()->invalidate();
+
+        $message = sprintf('Anda telah logout, %s.', $username);
+
+        return redirect()->route("index")->with('info', $message);
+    }
+
+
     // untuk handle nya ada di  controller Laporan
     public function laporanView()
     {
         /* $laporan_users = $user->laporan()->with('user')->get(); */  // bisa juga , karena hasMay ke table Laporan
-        $laporan_selesai = Laporan::with("user")->where("status","selesai")->get();
+        $laporan_selesai = Laporan::with("user")->where("status", "selesai")->get();
         return view("user.laporan");
     }
 
@@ -119,11 +148,11 @@ class UserController extends Controller
     {
         $user = auth()->user();
 
-$laporan_users = Laporan::with('user')
-    ->where('user_id', $user->id)   // FK user_id
-    ->get();
+        $laporan_users = Laporan::with('user')
+            ->where('user_id', $user->id)   // FK user_id
+            ->get();
 
-        return view("user.history", compact("laporan_users"));
+        return view("user.history", compact("laporan_users", "user"));
     }
     public function mapView()
     {

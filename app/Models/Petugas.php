@@ -19,6 +19,8 @@ class Petugas extends Authenticatable
         'username',
         'password',
         'email',
+        'invite_code',
+        'admin_id',
     ];
 
     protected $hidden = [
@@ -33,7 +35,8 @@ class Petugas extends Authenticatable
     {
         return $this->belongsTo(Admin::class);
     }
-     public function laporan() {
+    public function laporan()
+    {
         return $this->hasMany(Laporan::class);
     }
 }

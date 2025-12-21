@@ -212,9 +212,9 @@
                 </div>
             </div>
         </div>
-        @endif
+    @endif
 
-  @if (session('warning'))
+    @if (session('warning'))
         <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-4 border-0 bg-proses-gradient cl-kartu shadow-sidebar">
@@ -225,7 +225,7 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body fs-6">
-                        {{ session('info') }}
+                        {{ session('warning') }}
                     </div>
                     <div class="modal-footer border-0">
                         <button type="button" class="btn bg-kartu-hover fw-semibold"
@@ -257,18 +257,23 @@
             </div>
         </div>
     @endif
-
     <!-- validasi popup untuk "success" | "error" | " info" start-->
 
-    <body class="d-flex">
-        <!-- Sidebar start -->
-        @if ($isSidebar)
-            {{-- Toggle Button untuk sidebar --}}
-            <button class="btn bg-sidebar-gradient text-white shadow-sidebar position-fixed top-3 end-3 z-index-admin"
-                type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar">
-                <i class="bi bi-list"></i>
-            </button>
+        <body>
 
+            <!-- Sidebar start -->
+            @if ($isSidebar)
+            <header class="d-flex gap-3 header">
+                {{-- Toggle Button untuk sidebar --}}
+                <button class="btn bg-sidebar-gradient text-white shadow-sidebar"
+                    type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <h3>Admin Panel</h3>
+
+
+            </header>
             {{-- Offcanvas Sidebar --}}
             <div class="offcanvas offcanvas-end bg-sidebar-gradient text-white shadow-sidebar" tabindex="-1"
                 id="adminSidebar" aria-labelledby="adminSidebarLabel">
@@ -301,13 +306,11 @@
                         <li class="nav-item mb-2">
                             <a href="#laporan" class="nav-link text-white bg-sidebar-hover rounded shadow-sm mb-1">
                                 <i class="bi bi-file-earmark-text me-2"></i>
-                                <span class="cl-kartu">Laporan</span>
+                                <span class="cl-kartu">Laporans</span>
                             </a>
                         </li>
                     </ul>
-                </div>
-                {{-- menu untuk Admin --}}
-                <div class="offcanvas-body p-3">
+                    {{-- menu untuk Admin --}}
                     <ul class="nav nav-pills flex-column mb-auto">
                         <li class="nav-item mb-2">
                             <a href="{{ route('admin.profile') }}"
@@ -319,6 +322,7 @@
 
                     </ul>
                 </div>
+
             </div>
         @endif
         <!-- Sidebar end -->

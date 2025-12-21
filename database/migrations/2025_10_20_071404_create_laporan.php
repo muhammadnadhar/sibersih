@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string("nama_pelapor");
             $table->string("nama_petugas")->nullable(); // di update sat di tugaskan oleh admin
 
-            $table->string('image_path');
+            $table->string('image_laporan');
+            $table->string('image_laporan_selesai')->nullable();
+
 
             $table->enum('status', ['pending', 'ditugaskan', 'selesai'])
                 ->default('pending');

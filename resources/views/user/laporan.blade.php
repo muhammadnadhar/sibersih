@@ -1,4 +1,4 @@
-<x-layout-user>
+<x-layout-user :title="'Laporan'" :isSidebar="true">
 
     <div class="container mt-5">
 
@@ -9,9 +9,8 @@
             </div>
 
             <div class="card-body">
-
                 {{-- nantik arahkan ke controler Laporan tapi menggunaka api.php --}}
-                <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('user.laporan.post') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <!-- Judul -->
                     <div class="mb-3">
@@ -20,6 +19,10 @@
                         </label>
                         <input type="text" name="judul" class="form-control" placeholder="Masukkan judul laporan"
                             required>
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                            <span class="visually-hidden">New alerts</span>
+                        </span>
                     </div>
 
                     <!-- Kategori -->
@@ -42,6 +45,10 @@
                             <i class="bi bi-card-text"></i> Deskripsi Laporan
                         </label>
                         <textarea name="deskripsi" class="form-control" rows="4" placeholder="Tulis detail kejadian..." required></textarea>
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                            <span class="visually-hidden">New alerts</span>
+                        </span>
                     </div>
 
                     <!-- Upload File -->
@@ -51,6 +58,20 @@
                         </label>
                         <input type="file" name="image_laporan" class="form-control" required>
                         <small class="text-muted">Format: JPG, PNG, PDF, DOCX</small>
+                    </div>
+
+                    <!-- Lokasi -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="bi bi-geo-alt"></i> Lokasi
+                        </label>
+                        <input type="text" name="lokasi" class="form-control" placeholder="Masukkan lokasi kejadian"
+                            max="255">
+                        <div class="d-flex gap-2 justify-content-center align-items-center">
+                            <p>Bisa cek di menu smal <a class="nav-link samll text-white-50"
+                                    href="{{ route('user.map') }}">Lokasi</a></p>
+
+                        </div>
                     </div>
 
                     <!-- Tombol Submit -->

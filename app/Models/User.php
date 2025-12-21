@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'invite_code',
+        'admin_id',
     ];
 
     /**
@@ -52,7 +54,8 @@ class User extends Authenticatable
         $this->belongsTo(Admin::class);
     }
 
-     public function laporan() {
+    public function laporan()
+    {
         return $this->hasMany(Laporan::class);
     }
 }

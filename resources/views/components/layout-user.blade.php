@@ -76,10 +76,91 @@
         .bg-kartu {
             background-color: #FFFFFF;
         }
+
+        /* ===== HOVER EFFECTS ===== */
+        .bg-utama-hover:hover {
+            background-color: #162034;
+            transition: 0.3s;
+        }
+
+        .bg-sidebar-hover:hover {
+            background-color: #1e50e3;
+            transition: 0.3s;
+        }
+
+        .bg-sukses-hover:hover {
+            background-color: #28b07c;
+            transition: 0.3s;
+        }
+
+        .bg-proses-hover:hover {
+            background-color: #f9b825;
+            transition: 0.3s;
+        }
+
+        .bg-urgent-hover:hover {
+            background-color: #ef5d5d;
+            transition: 0.3s;
+        }
+
+        .bg-kartu-hover:hover {
+            background-color: #f0f0f0;
+            transition: 0.3s;
+        }
+
+        /* ===== SHADOWS ===== */
+        .shadow-utama {
+            box-shadow: 0 4px 6px rgba(30, 41, 59, 0.3);
+        }
+
+        .shadow-sidebar {
+            box-shadow: 0 4px 6px rgba(43, 104, 255, 0.3);
+        }
+
+        .shadow-sukses {
+            box-shadow: 0 4px 6px rgba(52, 211, 153, 0.3);
+        }
+
+        .shadow-proses {
+            box-shadow: 0 4px 6px rgba(251, 191, 36, 0.3);
+        }
+
+        .shadow-urgent {
+            box-shadow: 0 4px 6px rgba(248, 113, 113, 0.3);
+        }
+
+        .shadow-kartu {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ===== GRADIENTS ===== */
+        .bg-utama-gradient {
+            background: linear-gradient(135deg, #1E293B, #374151);
+        }
+
+        .bg-sidebar-gradient {
+            background: linear-gradient(135deg, #2B68FF, #3f7bff);
+        }
+
+        .bg-sukses-gradient {
+            background: linear-gradient(135deg, #34D399, #22c55e);
+        }
+
+        .bg-proses-gradient {
+            background: linear-gradient(135deg, #FBBF24, #f59e0b);
+        }
+
+        .bg-urgent-gradient {
+            background: linear-gradient(135deg, #F87171, #ef4444);
+        }
+
+        .bg-kartu-gradient {
+            background: linear-gradient(135deg, #FFFFFF, #f3f4f6);
+        }
     </style>
 </head>
 
-<body>
+<body class="bg-kartu-gradient">
 
     @if (session('success'))
         <div class="alert bg-sukses cl-kartu border-0 rounded-3 py-3 px-4 d-flex align-items-center">
@@ -92,12 +173,12 @@
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             <span>{{ session('info') }}</span>
         </div>
-      @endif
+    @endif
 
-  @if (session('warning'))
+    @if (session('warning'))
         <div class="alert bg-proses cl-kartu border-0 rounded-3 py-3 px-4 d-flex align-items-center">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            <span>{{ session('info') }}</span>
+            <span>{{ session('warning') }}</span>
         </div>
     @endif
 
@@ -108,66 +189,88 @@
         </div>
     @endif
 
-    <main class="d-md-flex gap-1">
-
+    <main class="d-md-flex gap-1 ">
         @if ($isSidebar)
-            {{-- Sidebar (Desktop) --}}
-            <div class="d-none d-md-flex flex-column vh-100 bg-primary text-white p-4" style="width: 240px;">
-                <h4 class="text-center fw-bold mb-4"> SIBERSIH</h4>
-                <nav class="nav flex-column">
-                    <a href="{{ route('user.dashboard') }}"
-                        class="nav-link text-white bg-opacity-50 bg-primary rounded px-3 py-2 active">Dashboard</a>
-                    <a href="#" class="nav-link text-white px-3 py-2">Laporan Sampah</a>
-                    <a href="#" class="nav-link text-white px-3 py-2">Petugas</a>
-                    <a href="#" class="nav-link text-white px-3 py-2">Peta Lokasi</a>
-                    <a href="#" class="nav-link text-white px-3 py-2">Profil</a>
-                </nav>
-            </div>
+            <nav
+                class="d-none d-md-flex flex-column
+           vh-100
+           bg-sidebar-gradient shadow-sidebar px-3">
 
-            {{-- Bottom Navbar (Destop) --}}
-            <nav class="navbar navbar-expand bg-primary text-white fixed-bottom d-md-none">
-                <ul class="navbar-nav d-flex justify-content-around w-100 text-center small">
+                {{-- APP LOGO / ICON --}}
+                <div class="pt-4 pb-3 text-center">
+                    <div class="mx-auto mb-2 rounded-circle bg-kartu shadow-kartu
+                    d-flex align-items-center justify-content-center"
+                        style="width:56px;height:56px;">
 
-                    <li class="nav-item">
-                        <a href="{{ route('user.dashboard') }}"
-                            class="nav-link text-white d-flex flex-column align-items-center">
-                            <i class="bi bi-speedometer2 fs-5"></i>
-                            Dashboard
+                        {{-- <i class="bi bi-shield-lock-fill fs-3 cl-sidebar"></i> --}}
+                        <a class="nav-link" href="{{ route('index') }}">
+                            <img style="width: 100%; height: 100%; border-radius: 50%;" src="{{ asset('favicon.ico') }}"
+                                alt="SIBERSIH">
                         </a>
-                    </li>
+                    </div>
+                    <div class="small fw-semibold cl-kartu">
+                        SIBERSIH
+                    </div>
+                </div>
 
-                    <li class="nav-item">
-                        <a href="{{ route('user.laporan') }}"
-                            class="nav-link text-white d-flex flex-column align-items-center">
-                            <i class="bi bi-hourglass-split"></i>
-                            Laporan
-                        </a>
-                    </li>
+                {{-- NAVIGATION (CENTERED) --}}
+                <div class="d-flex flex-column justify-content-center flex-grow-1">
+                    <ul class="navbar-nav gap-2 text-center">
 
-                    <li class="nav-item">
-                        <a href="{{ route('user.map') }}"
-                            class="nav-link text-white d-flex flex-column align-items-center">
-                            <i class="bi bi-geo-alt fs-5"></i>
-                            Peta
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('user.history') }}"
-                            class="nav-link text-white d-flex flex-column align-items-center">
-                            <i class="bi bi-geo-alt fs-5"></i>
-                            history
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('user.profile') }}"
-                            class="nav-link text-white d-flex flex-column align-items-center">
-                            <i class="bi bi-person-circle fs-5"></i>
-                            Profil
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('user.dashboard') }}"
+                                class="nav-link d-flex flex-column align-items-center
+                          cl-kartu fw-semibold rounded-3 px-3 py-3
+                          bg-sidebar-hover shadow-sidebar">
+                                <i class="bi bi-speedometer2 fs-4 mb-1"></i>
+                                <span class="small">Dashboard</span>
+                            </a>
+                        </li>
 
-                </ul>
+                        <li class="nav-item">
+                            <a href="{{ route('user.laporan') }}"
+                                class="nav-link d-flex flex-column align-items-center
+                          cl-kartu rounded-3 px-3 py-3
+                          bg-sidebar-hover opacity-75">
+                                <i class="bi bi-hourglass-split fs-4 mb-1"></i>
+                                <span class="small">Laporan</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('user.map') }}"
+                                class="nav-link d-flex flex-column align-items-center
+                          cl-kartu rounded-3 px-3 py-3
+                          bg-sidebar-hover opacity-75">
+                                <i class="bi bi-geo-alt fs-4 mb-1"></i>
+                                <span class="small">Peta</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('user.history') }}"
+                                class="nav-link d-flex flex-column align-items-center
+                          cl-kartu rounded-3 px-3 py-3
+                          bg-sidebar-hover opacity-75">
+                                <i class="bi bi-clock-history fs-4 mb-1"></i>
+                                <span class="small">Riwayat</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('user.profile') }}"
+                                class="nav-link d-flex flex-column align-items-center
+                          cl-kartu rounded-3 px-3 py-3
+                          bg-sidebar-hover opacity-75">
+                                <i class="bi bi-person-circle fs-4 mb-1"></i>
+                                <span class="small">Profil</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
             </nav>
+
 
             {{-- Sidebar (Mobile Version Alternative) --}}
             <nav class="navbar bg-primary text-white fixed-bottom shadow d-md-none">

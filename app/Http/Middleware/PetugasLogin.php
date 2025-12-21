@@ -17,24 +17,24 @@ class PetugasLogin
     public function handle(Request $request, Closure $next): Response
     {
 
+        // Jika user biasa login → tolak
+        if (Auth::check()) { // guard users default
+            $user = Auth::user();
+            return redirect()->route('user.dashboard')
+                ->with('info', 'Kamu user, bukan petugas (' . $user->name . ')');
+        }
+
         // Jika admin login → tolak
         if (Auth::guard('admins')->check()) {
             $admin = Auth::guard('admins')->user();
             return redirect()->route('admin.dashboard')
-                ->with('error', 'Kamu admin, bukan petugas (' . $admin->name . ')');
-        }
-
-        // Jika user biasa login → tolak
-        if (Auth::check()) { // guard web
-            $user = Auth::user();
-            return redirect()->route('user.dashboard')
-                ->with('error', 'Kamu user, bukan petugas (' . $user->name . ')');
+                ->with('info', 'Kamu admin, bukan petugas (' . $admin->name . ')');
         }
 
         // Jika petugas BELUM login → tolak
         if (!Auth::guard('petugas')->check()) {
             return redirect()->route('petugas.sign-in')
-                ->with('error', 'Kamu harus login sebagai petugas');
+                ->with('info', 'Kamu harus login sebagai petugas');
         }
 
 

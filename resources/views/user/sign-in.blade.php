@@ -31,7 +31,7 @@
                     </div>
 
                     <button type="submit" class="btn w-100 mt-2"
-                        style="background-color: #2B68FF; color: white; border-radius: 10px;"><a
+                        style="background-color: #2B68FF; color: white; border-radius: 10px;">sign in<a
                             href="{{ route('user.sign-up') }}"></a></button>
 
 

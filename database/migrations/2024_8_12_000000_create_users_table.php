@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Nette\Utils\Random;
 
 return new class extends Migration
 {
@@ -17,7 +18,11 @@ return new class extends Migration
             $table->string('email')->unique();
 
             $table->string("avatar")->nullable()->default("/image/default.webp"); // path Image
-            $table->string("invite_code"); // code grupe dari admin
+            $table->string("invite_code"); // code grupe dari admin , default nantik random dari admin
+
+            // info lain 
+            $table->string("phone")->nullable();
+            $table->string("address")->nullable();
 
             // foreign key ke admin
             $table->unsignedBigInteger('admin_id');
