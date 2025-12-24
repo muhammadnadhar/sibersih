@@ -18,6 +18,13 @@
 5. chart.js : library chart dari JS
 6. axios : untuk management Api di sisi Client
 7. alexpechkarev/google-maps : handle Api untuk Map
+8. @googlemaps/js-api-loader : untuk integrasi map di Javascript
+   url : https://www.npmjs.com/package/@googlemaps/js-api-loader
+
+### Toolskit
+
+-   `alexpechkarev/google-maps` : untuk integrasi google map
+    > google console sibersih project :https://console.cloud.google.com/home/dashboard?project=sibersih&organizationId=0
 
 ### controller || model || Route
 

@@ -30,15 +30,34 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn w-100 mt-2"
-                        style="background-color: #2B68FF; color: white; border-radius: 10px;">sign in<a
-                            href="{{ route('user.sign-up') }}"></a></button>
+                    <button type="submit"
+                        class="btn w-100 mt-3
+               bg-sidebar-gradient text-white
+               fw-semibold py-2 rounded-3
+               shadow-sidebar
+               bg-sidebar-hover">
+                        <i class="bi bi-send-fill me-1"></i>
+                        Submit
+                    </button>
 
 
-                    <div class="mt-3 text-center">
-                        <small style="color: #2B68FF; cursor: pointer;"><a href="{{ route('user.sign-up') }}">Belum
-                                punya akun? </a></small>
+                    <div class="mt-4 text-center d-flex justify-content-center align-items-center gap-3">
+                        <span class="small cl-utama">
+                            Belum punya akun?
+                        </span>
+
+                        <a href="{{ route('user.sign-up') }}"
+                            class="p-2  rounded-pill
+              bg-sidebar-gradient shadow-sidebar
+              text-white fw-semibold small
+              d-inline-flex align-items-center gap-1
+              text-decoration-none
+              bg-sidebar-hover">
+                            Daftar Sekarang
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
+
                 </form>
             </div>
         </div>

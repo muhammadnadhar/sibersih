@@ -1,4 +1,4 @@
-@props(['isSidebar' => false, 'admin' => null, 'css' => false])
+@props(['isSidebar' => false, 'admin' => null, 'js' => false, 'css' => false])
 <!DOCTYPE html>
 <html lang="en">
 
@@ -259,21 +259,56 @@
     @endif
     <!-- validasi popup untuk "success" | "error" | " info" start-->
 
-        <body>
+    <body>
 
-            <!-- Sidebar start -->
-            @if ($isSidebar)
-            <header class="d-flex gap-3 header">
-                {{-- Toggle Button untuk sidebar --}}
-                <button class="btn bg-sidebar-gradient text-white shadow-sidebar"
-                    type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar">
-                    <i class="bi bi-list"></i>
-                </button>
+        <!-- Sidebar start -->
+        @if ($isSidebar)
+            <header
+                class="d-flex align-items-center justify-content-between
+               gap-3 mb-4 px-3 py-2
+               bg-kartu rounded-4 shadow-kartu">
 
-                <h3>Admin Panel</h3>
+                {{-- LEFT : TOGGLE SIDEBAR --}}
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn bg-sidebar-gradient text-white shadow-sidebar" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar">
+                        <i class="bi bi-list fs-5"></i>
+                    </button>
 
+                    <div>
+                        <h5 class="mb-0 fw-semibold cl-utama">Admin Panel</h5>
+                        <span class="small text-muted">Dashboard & Manajemen Sistem</span>
+                    </div>
+                </div>
+
+                {{-- RIGHT : ADMIN INFO --}}
+                <div class="d-flex align-items-center gap-3">
+
+                    <span class="badge bg-sukses-gradient shadow-sukses d-none d-md-inline">
+                        Online
+                    </span>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="rounded-circle bg-sidebar-gradient shadow-sidebar
+                        d-flex align-items-center justify-content-center"
+                            style="width:36px;height:36px;">
+                            <i class="bi bi-person-fill text-white"></i>
+                        </div>
+                        <div class="d-none d-md-block small">
+                            <div class="fw-semibold cl-utama">
+                                {{ $admin->name ?? 'Admin' }}
+                            </div>
+                            <div class="text-muted">
+                                Administrator
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
             </header>
+
+
             {{-- Offcanvas Sidebar --}}
             <div class="offcanvas offcanvas-end bg-sidebar-gradient text-white shadow-sidebar" tabindex="-1"
                 id="adminSidebar" aria-labelledby="adminSidebarLabel">
@@ -290,7 +325,10 @@
 
                 {{-- Body / Menu Dashboar --}}
                 <div class="offcanvas-body p-3">
-                    <ul class="nav nav-pills flex-column mb-auto">
+
+                    <!-- Menu dahsboard -->
+                    <h5 class="text-white mb-3">dashboard Menu </h5>
+                    <ul class="nav nav-pills flex-column mb-4">
                         <li class="nav-item mb-2">
                             <a href="#users" class="nav-link text-white bg-sidebar-hover rounded shadow-sm mb-1">
                                 <i class="bi bi-people me-2"></i>
@@ -310,18 +348,29 @@
                             </a>
                         </li>
                     </ul>
-                    {{-- menu untuk Admin --}}
+
+                    <!-- Menu Admin -->
+                    <h5 class="text-white mb-3 mt-5">Menu Admin</h5>
                     <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('admin.dashboard') }}"
+                                class="nav-link text-white bg-sidebar-hover rounded shadow-sm mb-1">
+                                <i class="bi bi-speedometer2 fs-4 mb-1"></i>
+                                <span class="cl-kartu">Dashboard</span>
+                            </a>
+                        </li>
                         <li class="nav-item mb-2">
                             <a href="{{ route('admin.profile') }}"
                                 class="nav-link text-white bg-sidebar-hover rounded shadow-sm mb-1">
-                                <i class="bi bi-people me-2"></i>
+                                <i class="bi bi-person-circle me-2"></i>
                                 <span class="cl-kartu">Profile</span>
                             </a>
                         </li>
 
                     </ul>
+
                 </div>
+
 
             </div>
         @endif
@@ -335,6 +384,9 @@
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
         </script>
 
+        @if ($js)
+            @vite($js)
+        @endif
 
         <script>
             @if (session('success'))

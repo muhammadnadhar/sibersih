@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Laporan;
+use App\Models\Petugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use GoogleMaps\Facade\GoogleMapsFacade as GoogleMaps;
+// use GoogleMaps\Facade\GoogleMapsFacade as GoogleMaps;
 
 
 class UserController extends Controller
@@ -17,14 +18,25 @@ class UserController extends Controller
     {
 
         $user = auth()->user();
-        $laporans = Laporan::where("nama_pelapor", $user->username)->get();
 
-        $total_laporan = $laporans->count();
-        $laporan_selesai = $laporans->where("status", "selesai"); //adalah laporan succes bagia user
-        $total_laporan_selesai = $laporan_selesai->count();
+        $baseLaporan = $user->laporan(); // ambil laporan yang ada user
+
+        $total_laporan = (clone $baseLaporan)->count();
+        $total_laporan_selesai = (clone $baseLaporan)
+            ->where('status', 'selesai')
+            ->count();
+        $laporan_terbaru = (clone $baseLaporan)
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        $basePetugas = Petugas::where("invite_code", $user->invite_code);
+
+        $petugas_paginate = $basePetugas->simplePaginate();
+        $petugas_total = (clone $basePetugas)->count();
 
 
-        return view("user.dashboard", compact("user", "total_laporan", "total_laporan_selesai"));
+        return view("user.dashboard", compact("user", "total_laporan", "total_laporan_selesai", "laporan_terbaru", "petugas_paginate", "petugas_total"));
     }
     // halaman profile User
     public function profileView()
@@ -36,6 +48,11 @@ class UserController extends Controller
 
         return view("user.profile", compact("user", "laporan_activity"));
     }
+    public function profileEditView()
+    {
+        return view("user.profile-edit");
+    }
+    public function profileEditPut() {}
 
     public function signInView()
     {
@@ -47,8 +64,34 @@ class UserController extends Controller
     {
 
 
-        $name = $request->input('username');
-        $password = $request->input('password');
+        $validated = $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:6'],
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min'      => 'Password minimal 6 karakter.',
+        ]);
+
+        // Ambil data hasil validasi
+        $credentials = [
+            'username'     => $validated['username'],
+            'password' => $validated['password'],
+        ];
+
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate(); // cegah session fixation
+
+            return redirect()
+                ->route('user.dashboard')
+                ->with('success', 'Selamat datang, ' . $credentials['name'] . '!');
+        }
+
+        return back()
+            ->withInput($request->only('username'))
+            ->with('error', 'Login gagal. Username atau password salah.');
+
 
         /* // login cara sebelumnya manual  */
         /* if ($name &&  Hash::check($password, $name->password)) { */
@@ -60,14 +103,6 @@ class UserController extends Controller
         /*     // Jika user tidak ditemukan, lakukan sesuatu */
         /*     return redirect()->back()->with("error", "Login gagal. Periksa username dan password Anda."); */
         /* } */
-
-        // otomatis login dan cek password dan name
-        if (Auth::attempt(['name' => $name, 'password' => $password])) {
-            $request->session()->regenerate(); // sesion
-            return redirect()->route('user.dashboard')->with("info", "welcome " . $name);
-        } else {
-            return redirect()->back()->with("error", "Login gagal. Periksa username dan password Anda.");
-        }
     }
     public function signUpView()
     {
@@ -104,7 +139,7 @@ class UserController extends Controller
 
         // simpan ke database
         $user = User::create([
-            "name" =>  $validated["username"],
+            "username" =>  $validated["username"],
             "admin_id" => $admin_id,
             "password" => Hash::make($validated["password"]),
             "email" => $validated['email'],
@@ -119,7 +154,7 @@ class UserController extends Controller
     public function logout(Request $request)
     {
 
-        $username = auth()->user()->name;
+        $username = auth()->user()->username;
         if (!$username) {
             return redirect()->back()->with("warning", "kamu bukan user ");
         }
@@ -156,12 +191,30 @@ class UserController extends Controller
     }
     public function mapView()
     {
-        // ini masih belum tau kenapa auto sugestion tidak mengenalinya , nantik di handle aja
-        $response_map =    GoogleMaps::load('geocoding')
-            ->setParam([
-                'address' => 'Monas, Jakarta'
-            ])
-            ->get();
+        $user = auth()->user();
+
+        // API TIDAK BISA DI AKSES ATAU DINIE ( mintak pembayaran mungkin wkwkw), jadi fitur ini di tuda dahulu
+        // $response = GoogleMaps::load('geocoding')
+        //     ->setParam([
+        //         'address' => $user->address ?: 'Aceh Besar, Indonesia',
+        //     ])
+        //     ->get();
+
+        // $data = json_decode($response, true);
+
+        // if ($data['status'] !== 'OK' || empty($data['results'])) {
+        //     return redirect()
+        //         ->back()
+        //         ->with('error', 'Gagal mendapatkan koordinat lokasi');
+        // }
+
+        // $location = $data['results'][0]['geometry']['location'];
+
+        // $lokasi_user = [
+        //     'lat' => $location['lat'],
+        //     'lng' => $location['lng'],
+        // ];
+
 
         return view("user.peta-lokasi");
     }

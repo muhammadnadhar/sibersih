@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminLogin;
@@ -31,6 +32,8 @@ Route::prefix('user')->controller(UserController::class)->group(function () {
     Route::middleware(UserLogin::class)->group(function () {
         Route::get('/', 'dashboard')->name('user.dashboard');
         Route::get('/profile', 'profileView')->name('user.profile');
+        Route::get("/profile-edit", "profileEditView")->name('user.profile.edit');
+        Route::put("/prorfil-edit", 'profileEditPut')->name('user.profile.edit.put');
         Route::get("/map", "mapView")->name("user.map");
         Route::get("/history", "historyView")->name("user.history");
         Route::get("/laporan", 'laporanView')->name("user.laporan");
@@ -51,6 +54,8 @@ Route::prefix('petugas')->controller(PetugasController::class)->group(function (
         Route::get('/', 'dashboard')->name('petugas.dashboard');
         Route::get('history', 'historyView')->name('petugas.history');
         Route::get('/profile', 'profileView')->name('petugas.profile');
+        Route::get("/profile-edit", "profileEditView")->name('petugas.profile.edit');
+        Route::put("/prorfil-edit", 'profileEditPut')->name('petugas.profile.edit.put');
         Route::get("/laporan", 'laporanView')->name("petugas.laporan");
         Route::get("/map", "mapView")->name("petugas.map");
     });
@@ -69,8 +74,9 @@ Route::prefix('admin')->controller(AdminController::class)->group(function () {
     Route::middleware(AdminLogin::class)->group(function () {
         Route::get('/', 'dashboard')->name('admin.dashboard');
         Route::get("/laporan-id", 'laporanId')->name("admin.laporan.id");
+        Route::put("/update-laporan", 'updatelaporan')->name("admin.update.laporan");
         Route::get("/petugas-id", "petugasId")->name("admin.petugas.id");
-        Route::post("/petugas-id", "petugasIdPost")->name("admin.petugas.id.post");
+        // Route::post("/petugas-id", "petugasIdPost")->name("admin.petugas.id.post");
         Route::get('/profile', 'profileView')->name('admin.profile');
         Route::get('/profile-edit', 'profileEditView')->name('admin.profile.edit');
         Route::put("/update-password", 'passwordUpdatePut')->name('admin.password.update');
@@ -86,7 +92,7 @@ Route::prefix('admin')->controller(AdminController::class)->group(function () {
 
 
 // LAPORAN  | Handle Data laporan
-Route::prefix("/laporan")->controller(Laporan::class)->group(function () {
+Route::prefix("/laporan")->controller(LaporanController::class)->group(function () {
     Route::post('/user', "userLaporan")->name("user.laporan.post");
     Route::put('/petugas', "petugasLaporan")->name("petugas.laporan.post"); // petugas update laporan nya
 });

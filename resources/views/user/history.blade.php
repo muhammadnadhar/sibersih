@@ -1,33 +1,44 @@
-<x-layout-base :title="'History | ' . ($user->name ?? 'User')" :isSidebar="true">
+<x-layout-user :isSidebar="true" :title="'History | ' . ($user->name ?? 'User')">
 
     <div class="container py-4">
 
         <h3 class="fw-bold mb-4 cl-utama">Riwayat Pelaporan</h3>
         <div class="row">
             <h4 class="text-center">History</h4>
-            <!-- Item 1 (Sukses) -->
-            @if (empty($laporan_users) || count($laporan_users) == 0)
-                <p class="text-center cl-utama">Belum ada riwayat pelaporan.</p>
-            @else
-                <div class="col-md-12 mb-3">
-                    <div
-                        class="card border-0 rounded-4 shadow-sm p-3 d-flex flex-row justify-content-between align-items-center bg-sukses cl-kartu">
-                        @foreach ($laporan_users as $laporan)
-                            <div>
-                                <h5 class="fw-semibold mb-1">{{ $laporan->judul }}</h5>
-                                <p class="mb-0 small">Tanggal : {{ $laporan->tanggal_laporan }}</p>
-                            </div>
-                            <span class="badge bg-white text-success fw-semibold px-3 py-2 rounded-3">
-                                {{ $laporan->status }}
-                            </span>
-                        @endforeach
 
-                    </div>
+            {{-- nantik rencananya akan di simpan di table khusu untuk history agar lebih banyak tidka hanya laporan aja  --}}
+            @if (empty($laporan_users) || count($laporan_users) == 0)
+                <p class="text-center cl-utama">Belum ada riwayat apapun.</p>
+            @else
+                <div class="d-flex flex-column gap-3">
+                    @foreach ($laporan_users as $laporan)
+                        <div class="card shadow-sm border-0 rounded-3" @class([
+                            'bg-success text-white' => $laporan->status == 'selesai',
+                            'bg-warning text-dark' => $laporan->status == 'pending',
+                            'bg-primary text-white' => $laporan->status == 'ditugaskan',
+                        ])>
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title fw-bold mb-1">{{ $laporan->judul }}</h5>
+                                    <p class="card-text mb-0 small">Tanggal: {{ $laporan->tanggal_laporan }}</p>
+                                </div>
+                                <span
+                                    class="badge rounded-pill 
+                    @if ($laporan->status == 'selesai') bg-light text-success 
+                    @elseif($laporan->status == 'pending') bg-light text-warning 
+                    @else bg-light text-primary @endif
+                fw-semibold px-3 py-2">
+                                    {{ ucfirst($laporan->status) }}
+                                </span>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+
             @endif
 
         </div>
 
     </div>
 
-</x-layout-base>
+</x-layout-user>

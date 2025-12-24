@@ -1,14 +1,9 @@
-<x-layout-admin :isSiderbar="true" :title="$admin->name . '| profile'">
+<x-layout-admin :isSidebar="true" :title="$admin->name . '| profile'">
 
     <div class="flex-grow-1 p-4">
-
-
-
         {{-- Account Details --}}
         <section id="account-details" class="mb-5">
 
-
-            {{-- Header --}}
             <div class="mb-4">
                 <h4 class="cl-utama fw-semibold mb-1">
                     <i class="bi bi-person-circle cl-sidebar me-2"></i>
@@ -20,7 +15,6 @@
             </div>
 
             <div class="row g-4">
-
 
                 <div class="col-lg-4">
 
@@ -36,7 +30,7 @@
                             </div>
 
                             <h6 class="cl-kartu fw-semibold mb-0">
-                                {{ $admin->name ?? 'Nama User' }}
+                                {{ $admin->username ?? 'Nama User' }}
                             </h6>
                             <span class="small text-light opacity-75">
                                 Pengguna Terdaftar
@@ -86,14 +80,14 @@
                             <div class="col-md-6">
                                 <label class="text-muted mb-1">Nama Lengkap</label>
                                 <div class="p-2 rounded-3 bg-abu cl-utama">
-                                    {{ auth()->user()->name ?? '-' }}
+                                    {{ $admin->username ?? '-' }}
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <label class="text-muted mb-1">Email</label>
                                 <div class="p-2 rounded-3 bg-abu cl-utama">
-                                    {{ auth()->user()->email ?? '-' }}
+                                    {{ $admin->email ?? '-' }}
                                 </div>
                             </div>
 

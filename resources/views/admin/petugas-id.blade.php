@@ -23,13 +23,8 @@
                         <p class="cl-proses"><i class="bi bi-clock"></i> Status: Sedang Bertugas</p>
                         <p class="cl-urgent"><i class="bi bi-exclamation-triangle"></i> Prioritas: Tinggi</p>
 
-                        <!-- Tombol Tugaskan Petugas -->
-                        <a href="{{ route('admin.petugas.id.post', ['id' => $petugas_id]) }}">
-                            <button class="btn bg-sidebar text-white mt-3">
-                                <i class="bi bi-person-plus"></i> Tugaskan Petugas
-                            </button>
 
-                        </a>
+
                     </div>
                 </div>
             </div>

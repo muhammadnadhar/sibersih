@@ -19,21 +19,25 @@ class LaporanFactory extends Factory
      */
     public function definition(): array
     {
+        // Ambil user, petugas, admin random
+        $user = User::inRandomOrder()->first();
+        $petugas = Petugas::inRandomOrder()->first();
+        $admin = Admin::inRandomOrder()->first();
+
         return [
-            'user_id'       => User::inRandomOrder()->first()->id ?? User::factory(),
-            'admin_id'      => Admin::inRandomOrder()->first()->id ?? null,
-            'petugas_id'    => Petugas::inRandomOrder()->first()->id ?? null,
-            "nama_pengadu" => User::inRandomOrder()->first()->name ,
-            'judul'         => $this->faker->sentence(4),
-            'kategori'      => $this->faker->randomElement(['Kebersihan', 'Lingkungan', 'Fasilitas Umum', 'Keamanan']),
-            'deskripsi'     => $this->faker->paragraph(3),
-
-            'file'          => $this->faker->filePath(), // atau nanti diganti file benar
-
-            'status'        => $this->faker->randomElement(['pending', 'diproses', 'ditugaskan', 'selesai']),
-
-            'lokasi'        => $this->faker->address(),
-            'tanggal_laporan' => $this->faker->dateTimeBetween('-7 days', 'now'),
+            'judul' => $this->faker->sentence(5),
+            'kategori' => $this->faker->randomElement(['Sampah Rumah Tangga', 'Sampah Plastik', 'Sampah Organik', 'Sampah Organik dan Non-Organik', "Sampah Non-Organik"]),
+            'deskripsi' => $this->faker->paragraph(),
+            'nama_pelapor' => $user ? $user->username : 'User Default',
+            'nama_petugas' => $petugas ? $petugas->username : null,
+            'image_laporan' => 'public/image/default/default.jpg',
+            'image_laporan_selesai' => null,
+            'status' => $this->faker->randomElement(['pending', 'ditugaskan', 'selesai']),
+            'lokasi' => $this->faker->address(),
+            'tanggal_laporan' => now(),
+            'admin_id' => $admin ? $admin->id : 1,
+            'petugas_id' => $petugas ? $petugas->id : null, // petugas memang tidka ada secara default
+            'user_id' => $user ? $user->id : 1,
         ];
     }
 }

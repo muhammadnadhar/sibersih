@@ -3,7 +3,7 @@
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="card shadow" style="width: 420px;  border-radius: 16px;">
             <div class="card-body p-4">
-                <h3 class="text-center mb-4" style="color: #1E293B; font-weight: 700;">User Register</h3>
+                <h3 class="text-center mb-4 cl-utama" style=" font-weight: 700;">Petugas Register</h3>
 
 
                 <form action="{{ route('petugas.sign-up.post') }}" method="POST">
@@ -22,7 +22,6 @@
                         <input type="email" name="email" class="form-control border border-secondary rounded-3"
                             placeholder="Masukkan email" required>
                     </div>
-
 
                     <!-- PASSWORD -->
                     <div class="mb-3">
@@ -52,6 +51,8 @@
                                 placeholder="Dapatkan dengan hubungi pihak pengelola" required>
                         </div>
                     </div>
+
+                    <input type="submit" class="btn w-100 mt-2" placeholder="submit">
 
 
                     <div class="mt-3 text-center text-primary text-decoration-none">

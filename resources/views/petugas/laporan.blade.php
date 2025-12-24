@@ -88,7 +88,7 @@
                                     <label class="form-label fw-bold">
                                         <i class="bi bi-upload"></i> Upload Gambar
                                     </label>
-                                    <input type="file" name="image_laporan_success" class="form-control">
+                                    <input type="file" name="image_laporan_selesai" class="form-control">
                                     <small class="text-muted">Format: JPG, PNG, PDF</small>
                                 </div>
 

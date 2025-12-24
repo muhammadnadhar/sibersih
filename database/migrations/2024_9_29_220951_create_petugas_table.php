@@ -19,11 +19,16 @@ return new class extends Migration
 
             $table->string("avatar")->nullable()->default("/image/default.webp"); // path Image
 
+            // petugas info
+            $table->string("area")->nullable(); // area petugas di tugaskan
+
+
             // forend key ke admin
             $table->unsignedBigInteger('admin_id');
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
 
-            $table->string("telepon")->nullable();
+            $table->string("phone")->nullable();
+            $table->string('address')->nullable();
 
             $table->string("invite_code"); // code grupe dari admin
 

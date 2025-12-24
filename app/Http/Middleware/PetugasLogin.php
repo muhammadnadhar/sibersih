@@ -21,14 +21,14 @@ class PetugasLogin
         if (Auth::check()) { // guard users default
             $user = Auth::user();
             return redirect()->route('user.dashboard')
-                ->with('info', 'Kamu user, bukan petugas (' . $user->name . ')');
+                ->with('info', 'Kamu user, bukan petugas ' . $user->username);
         }
 
         // Jika admin login → tolak
         if (Auth::guard('admins')->check()) {
             $admin = Auth::guard('admins')->user();
             return redirect()->route('admin.dashboard')
-                ->with('info', 'Kamu admin, bukan petugas (' . $admin->name . ')');
+                ->with('info', 'Kamu admin, bukan petugas (' . $admin->username . ')');
         }
 
         // Jika petugas BELUM login → tolak

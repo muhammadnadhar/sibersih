@@ -16,9 +16,11 @@ class Laporan extends Model
         'admin_id',
         'petugas_id',
         'judul',
+        'nama_pelapor',
         'kategori',
         'deskripsi',
-        'image',
+        'image_laporan',
+        'image_laporan_selesai',
         'status',
         'lokasi',
         'tanggal_laporan',
@@ -28,9 +30,9 @@ class Laporan extends Model
     //  * Pelapor
     //  */
     public function user()
-     {
-         return $this->belongsTo(User::class, 'user_id');
-     }
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     /**
      * Admin yang menangani laporan
@@ -43,8 +45,8 @@ class Laporan extends Model
     // /**
     //  * Petugas yang ditugaskan
     //  */
-     public function petugas()
-     {
-         return $this->belongsTo(User::class, 'petugas_id');
-     }
+    public function petugas()
+    {
+        return $this->belongsTo(User::class, 'petugas_id');
+    }
 }

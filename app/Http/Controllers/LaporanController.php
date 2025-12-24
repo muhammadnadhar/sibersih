@@ -44,7 +44,7 @@ class LaporanController extends Controller
             'kategori'  => $data['kategori'],
             'deskripsi' => $data['deskripsi'],
             'image_laporan'      => $namaImage,
-            "nama_pelapor" => $user->name,
+            "nama_pelapor" => $user->username,
             'admin_id' => $user->admin_id, // admin yang menegola user ambil berdasarkan id dari data user yg login
             'user_id'   => $user->id,
             'lokasi'    => $data['lokasi'], // jika ada
@@ -57,10 +57,10 @@ class LaporanController extends Controller
     }
     public function petugasLaporan(Request $request, $id)
     {
-        // Validasi request
+
         $request->validate([
             'status' => 'required|in:pending,diproses,ditugaskan,selesai',
-            'image_laporan_success' => 'nullable|file|max:2048', // boleh null, tapi kalau ada harus valid
+            'image_laporan_selesai' => 'nullable|file|max:2048', // boleh null, tapi kalau ada harus valid
         ]);
 
         $petugas = auth()->guard("petugas")->user();
@@ -69,7 +69,7 @@ class LaporanController extends Controller
         $laporan = Laporan::findOrFail($id);
 
         // Jika ada file baru diupload
-        if ($request->hasFile('image_laporan_success')) {
+        if ($request->hasFile('image_laporan_selesai')) {
 
             //  Hapus file lama bila ada ( tidak di perluakn , )
             // if ($laporan->file && file_exists(public_path('uploads/laporan/' . $laporan->file))) {
@@ -77,9 +77,10 @@ class LaporanController extends Controller
             // }
 
             // Upload file baru | yang di mana sampah sudah di bersihkan
-            $file = $request->file('image_laporan_success');
+            $file = $request->file('image_laporan_selesai');
             $namaFile = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('laporan-selesai'), $namaFile);
+            // $file->move(public_path('/storage/laporan-selesai'), $namaFile); // ini kurang konsisten
+            $file->storeAs('laporan-selesai', $namaFile, 'public');
 
             // Simpan nama file baru ke database
             $laporan->image_laporan_selesai = $namaFile;

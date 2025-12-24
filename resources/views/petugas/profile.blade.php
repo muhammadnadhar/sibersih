@@ -1,7 +1,7 @@
 <x-layout-petugas :title="'Profile |' . $petugas->username" :isSidebar="true">
 
     {{-- PROFILE PAGE - PETUGAS --}}
-    <section class="container-fluid bg-abu py-4">
+    <section class="container-fluid  py-4">
 
         {{-- Header --}}
         <div class="mb-4">
@@ -19,26 +19,26 @@
             {{-- LEFT PANEL : IDENTITY --}}
             <div class="col-xl-3 col-lg-4">
 
-                <div class="bg-utama-gradient text-white rounded-4 shadow-utama p-4 h-100">
+                <div class="bg-kartu-gradient text-white rounded-4 shadow-utama p-4 h-100">
 
                     <div class="text-center mb-4">
-                        <div class="mx-auto mb-2 rounded-circle bg-kartu shadow-kartu
+                        <div class="mx-auto mb-2 rounded-circle bg-kartu shadow-utama
                                 d-flex align-items-center justify-content-center"
                             style="width:90px;height:90px;">
                             <i class="bi bi-person-badge fs-1 cl-utama"></i>
                         </div>
 
-                        <h6 class="fw-semibold mb-0">
+                        <h6 class="fw-semibold mb-0 cl-utama">
                             {{ $petugas->username ?? 'Nama Petugas' }}
                         </h6>
-                        <span class="small opacity-75">
+                        <span class="small opacity-75 cl-utama">
                             Petugas Lapangan
                         </span>
                     </div>
 
                     <hr class="opacity-25">
 
-                    <div class="small">
+                    <div class="small cl-utama">
 
                         <div class="mb-2 d-flex justify-content-between">
                             <span class="opacity-75">ID Petugas</span>
@@ -77,7 +77,7 @@
                         <div class="col-md-6">
                             <label class="text-muted mb-1">Nama Lengkap</label>
                             <div class="p-2 bg-abu rounded-3">
-                                {{ $petugas->name ?? '-' }}
+                                {{ $petugas->username ?? '-' }}
                             </div>
                         </div>
 
@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="mt-4 d-flex gap-2">
-                        <a href="#" class="btn bg-utama-hover text-white shadow-utama">
+                        <a href="#" class="btn bg-utama-gradient text-white shadow-utama">
                             <i class="bi bi-pencil-square me-1"></i>
                             Edit Data
                         </a>
@@ -114,6 +114,11 @@
                             <i class="bi bi-shield-check me-1"></i>
                             Verifikasi
                         </a>
+                        <button class="btn bg-urgent-gradient text-white shadow-urgent btn-sm"data-bs-toggle="modal"
+                            data-bs-target="#logoutModal">
+                            <i class="bi bi-door-closed"></i>
+                            logout
+                        </button>
                     </div>
 
                 </div>
@@ -151,5 +156,31 @@
         </div>
 
     </section>
+
+
+    {{-- MODAL start --}}
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="logoutModalLabel">Are you sure</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin keluar dari akun ini?</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form action="{{ route('petugas.logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </x-layout-petugas>

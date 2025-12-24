@@ -14,7 +14,24 @@ class PetugasController extends Controller
     //halaman utama
     public function dashboard()
     {
-        return view("petugas.dashboard");
+
+        $petugas = auth()->guard("petugas")->user();
+
+        $laporan = $petugas->laporan();
+
+        // di ambil karena bedasarkan id dari petugas atau relatioship jadi jika sudah di tugaskan mana akan terhitung laporan untuk petugas
+        $total_laporan_ditugaskan = (clone $laporan)->where("status", "ditugaskan")->count();
+        $total_laporan_selesai = (clone $laporan)->where("status", "selesai")->count();
+        $total_laporan_pending = (clone $laporan)->where("status", "pending")->count();
+
+        $data = [
+            "total_laporan_ditugaskan" => $total_laporan_ditugaskan,
+            "totla_laporan_selesai" => $total_laporan_selesai,
+            "total_laporan_pending" => $total_laporan_pending,
+
+        ];
+
+        return view("petugas.dashboard", $data);
     }
     public function profileView()
     {
@@ -25,6 +42,11 @@ class PetugasController extends Controller
             "petugas" => $petugas,
         ]);
     }
+    public function profileEditView()
+    {
+        return view("petugas.profile-edit");
+    }
+    public function profileEditPut() {}
 
     public function signInView()
     {
@@ -33,20 +55,26 @@ class PetugasController extends Controller
 
     public function signInPost(Request $request)
     {
-        $request->validate([
-            'username'     => 'required',
-            'password' => 'required'
+        $validated = $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:6'],
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min'      => 'Password minimal 6 karakter.',
         ]);
+
 
         // $cridentials = $request->only("username", "password"); // sesuai nama table
 
-        if (Auth::attempt(['name' => $request->input('username'), 'password' => $request->input('password')])) {
+        if (Auth::attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
 
             $request->session()->regenerate();
             return redirect()->route("petugas.dashboard")->with("info", "selamat datanag petugas" . $request->user()->name);
-        } else {
-            return redirect()->back()->with("error", "nama dan password salah atau tidak ada  sialhkan login ualng ");
         }
+        return back()
+            ->withInput($request->only('username'))
+            ->with('error', 'Login gagal. Username atau password salah.');
     }
 
     public function signUpView()
@@ -82,7 +110,7 @@ class PetugasController extends Controller
         }
         // simpan ke database
         $petugas = Petugas::create([
-            "name" =>  $validated["username"],
+            "username" =>  $validated["username"],
             // password simpan dalam bentuk hash
             "password" => Hash::make($validated["password"]),
             "email" => $validated['email'],
@@ -103,8 +131,8 @@ class PetugasController extends Controller
 
         Auth::logout();
 
-        $request->session()->invalidate();
         $request->session()->regenerateToken();
+        $request->session()->invalidate();
 
         return redirect()->route("index")->with('info', 'Anda telah logout.' . $username);
     }
@@ -128,12 +156,28 @@ class PetugasController extends Controller
     }
     public function mapView()
     {
-        // ini masih belum tau kenapa auto sugestion tidak mengenalinya , nantik di handle aja
-        // $response_map =    GoogleMaps::load('geocoding')
+
+        // API TIDAK BISA DI AKSES ATAU DINIE ( mintak pembayaran mungkin wkwkw), jadi fitur ini di tuda dahulu
+        // $response = GoogleMaps::load('geocoding')
         //     ->setParam([
-        //         'address' => 'Monas, Jakarta'
+        //         'address' => $user->address ?: 'Aceh Besar, Indonesia',
         //     ])
         //     ->get();
+
+        // $data = json_decode($response, true);
+
+        // if ($data['status'] !== 'OK' || empty($data['results'])) {
+        //     return redirect()
+        //         ->back()
+        //         ->with('error', 'Gagal mendapatkan koordinat lokasi');
+        // }
+
+        // $location = $data['results'][0]['geometry']['location'];
+
+        // $lokasi_user = [
+        //     'lat' => $location['lat'],
+        //     'lng' => $location['lng'],
+        // ];
 
 
         return view("petugas.peta-lokasi");

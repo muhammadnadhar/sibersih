@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'key'       => 'ADD_YOUR_SERVICE_KEY_HERE',
+    'key'       => env('GOOGLE_MAPS_API_KEY'),
 
     /*
     |--------------------------------------------------------------------------

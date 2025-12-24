@@ -14,17 +14,17 @@
             {{-- LEFT : INFORMASI PRIBADI --}}
             <div class="col-lg-8">
 
-                <div class="card border-0 rounded-4 shadow-kartu bg-kartu p-4">
+                <div class="card border-0 rounded-4 shadow-kartu bg-kartu-gradient p-4">
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h6 class="fw-semibold cl-utama mb-0">
                             Informasi Pribadi
                         </h6>
                         <div class="d-flex justify-content-center align-items-center gap-3 ">
-
-                            <button class="btn bg-sidebar-gradient text-white shadow-sidebar btn-sm">
+                            <a href="{{ route('user.profile.edit') }}"
+                                class="btn bg-sidebar-gradient text-white shadow-sidebar btn-sm">
                                 <i class="bi bi-pencil-square me-1"></i> Edit Profil
-                            </button>
+                            </a>
                             <button class="btn bg-urgent-gradient text-white shadow-urgent btn-sm"data-bs-toggle="modal"
                                 data-bs-target="#logoutModal">
                                 <i class="bi bi-door-closed"></i>
@@ -38,35 +38,35 @@
                         <div class="col-md-6">
                             <label class="text-muted mb-1">Nama Lengkap</label>
                             <div class="p-2 bg-abu rounded-3 cl-utama">
-                                {{ auth()->user()->name ?? 'Nama User' }}
+                                {{ $user->fullname ?? 'Nama User' }}
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="text-muted mb-1">Email</label>
                             <div class="p-2 bg-abu rounded-3 cl-utama">
-                                {{ auth()->user()->email ?? 'user@email.com' }}
+                                {{ $user->email ?? 'user@email.com' }}
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="text-muted mb-1">Username</label>
                             <div class="p-2 bg-abu rounded-3 cl-utama">
-                                {{ auth()->user()->username ?? '-' }}
+                                {{ $user->username ?? '-' }}
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="text-muted mb-1">Nomor Telepon</label>
                             <div class="p-2 bg-abu rounded-3 cl-utama">
-                                {{ auth()->user()->phone ?? '-' }}
+                                {{ $user->phone ?? '-' }}
                             </div>
                         </div>
 
                         <div class="col-12">
                             <label class="text-muted mb-1">Alamat</label>
                             <div class="p-2 bg-abu rounded-3 cl-utama">
-                                {{ auth()->user()->address ?? 'Belum diisi' }}
+                                {{ $user->address ?? 'Belum diisi' }}
                             </div>
                         </div>
 
@@ -79,33 +79,33 @@
                         Aktivitas Terakhir
                     </h6>
 
-                    <ul class="list-unstyled mb-0 small">
-
-                        {{-- <li class="d-flex align-items-start mb-3">
-                            <span class="badge bg-sukses-gradient shadow-sukses me-3 mt-1">✔</span>
-                            <div>
-                                <strong>Password diperbarui</strong>
-                                <div class="text-muted">2 hari yang lalu</div>
-                            </div>
-                        </li>
-
-                        <li class="d-flex align-items-start mb-3">
-                            <span class="badge bg-proses-gradient shadow-proses me-3 mt-1">!</span>
-                            <div>
-                                <strong>Login dari perangkat baru</strong>
-                                <div class="text-muted">5 hari yang lalu</div>
-                            </div>
-                        </li>
-
-                        <li class="d-flex align-items-start">
-                            <span class="badge bg-sidebar-gradient shadow-sidebar me-3 mt-1">i</span>
-                            <div>
-                                <strong>Profil diperbarui</strong>
-                                <div class="text-muted">1 minggu yang lalu</div>
-                            </div>
-                        </li> --}}
-                        @if ($laporan_activity)
+                    @if (count($laporan_activity) == 0)
+                        <ul class="list-unstyled mb-0 small">
                             @forelse ($laporan_activity as $item)
+
+                                {{-- <li class="d-flex align-items-start mb-3">
+                                                    <span class="badge bg-sukses-gradient shadow-sukses me-3 mt-1">✔</span>
+                                                    <div>
+                                                        <strong>Password diperbarui</strong>
+                                                        <div class="text-muted">2 hari yang lalu</div>
+                                                    </div>
+                                                </li>
+                        
+                                                <li class="d-flex align-items-start mb-3">
+                                                    <span class="badge bg-proses-gradient shadow-proses me-3 mt-1">!</span>
+                                                    <div>
+                                                        <strong>Login dari perangkat baru</strong>
+                                                        <div class="text-muted">5 hari yang lalu</div>
+                                                    </div>
+                                                </li>
+                        
+                                                <li class="d-flex align-items-start">
+                                                    <span class="badge bg-sidebar-gradient shadow-sidebar me-3 mt-1">i</span>
+                                                    <div>
+                                                        <strong>Profil diperbarui</strong>
+                                                        <div class="text-muted">1 minggu yang lalu</div>
+                                                    </div>
+                                                </li> --}}
                                 <li class="d-flex align-items-start mb-3">
                                     <span class="badge bg-sidebar-gradient shadow-sidebar me-3 mt-1">i</span>
                                     <div>
@@ -115,15 +115,14 @@
                                 </li>
                             @endforeach
                             {{-- @eleIf (aktifitas lain) --}}
-                        @else
-                            <div>
-                                <p>Belum ada ACTIVITY</p>
-                            </div>
+                        </ul>
+                    @else
+                        <div>
+                            <p>Belum ada ACTIVITY</p>
+                        </div>
+                    @endif
 
-                        @endif
-                        @endif
 
-                    </ul>
                 </div>
 
             </div>
@@ -132,24 +131,25 @@
             <div class="col-lg-4">
 
                 {{-- PROFILE CARD --}}
-                <div class="card border-0 rounded-4 shadow-utama bg-utama-gradient text-white p-4 text-center">
+                <div class="card border-0 rounded-4 shadow-utama bg-kartu-gradient text-white p-4 text-center">
 
                     <div class="mx-auto mb-3 rounded-circle bg-kartu shadow-kartu
                             d-flex align-items-center justify-content-center"
                         style="width:90px;height:90px;">
-                        <i class="bi bi-person-fill fs-1 cl-utama"></i>
+                        <img style="width: 100%; height: 100%; border-radius: 50%;" src="{{ asset($user->avatar) }}"
+                            alt="{{ $user->username }}">
                     </div>
 
-                    <h6 class="fw-semibold mb-0">
-                        {{ auth()->user()->name ?? 'Nama User' }}
+                    <h6 class="fw-semibold mb-0 cl-utama">
+                        {{ $user->username ?? 'Nama User' }}
                     </h6>
-                    <span class="small opacity-75">
+                    <span class="small opacity-75 cl-utama">
                         Pengguna Terdaftar
                     </span>
 
                     <hr class="opacity-25 my-3">
 
-                    <div class="d-flex justify-content-between small">
+                    <div class="d-flex justify-content-between small cl-utama">
                         <span>Status Akun</span>
                         <span class="badge bg-sukses-gradient shadow-sukses">
                             Aktif

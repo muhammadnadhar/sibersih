@@ -8,6 +8,7 @@ use App\Models\Petugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,20 +17,63 @@ class AdminController extends Controller
     // index
     public function dashboard()
     {
+
+        // Ambil admin yang sedang login
         $admin = Auth::guard("admins")->user();
 
-        // entah kenapa tidak di dapat users yang spesifik dengan relatioin
-        /* $users = Admin::with('users')->where('invite_code',$admin->invite_code)->latest()->get(); */
-        $users = User::where("invite_code", $admin->invite_code)->paginate(5); //dari table user langsung
 
-        // dapatkan jenis laporan
-        $laporan  = Laporan::with(['admin', "petugas", "user"])->latest()->get();
+        //----------USERS
 
-        // entah kenapa tidak di dapat users yang spesifik dengan relatioin
-        /* $petugas = Admin::with("petugas")->where('invite_code',$admin->invite_code)->latest()->get(); */
-        $petugas = Petugas::where("invite_code", $admin->invite_code)->paginate(5);
 
-        return view("admin.dashboard", compact("users", "admin", "laporan", 'petugas'));
+        // Query dasar untuk user dengan invite_code admin
+        $users_query = User::where("invite_code", $admin->invite_code)
+            ->withCount('laporan'); // langsung hitung total laporan per user
+
+        // Pagination 5 per halaman (otomatis query ke DB)
+        $user_paginate = (clone $users_query)->paginate(5);
+
+        // Ambil semua user terbaru (hanya jika perlu di page lain)
+        $users = (clone $users_query)->latest()->get();
+
+        // Ambil total laporan per user sebagai array [int, int, ...]
+        $user_laporan_totals = $users_query->pluck('laporan_count')->toArray();
+
+
+        //----------PETUGAS
+
+
+        // Query dasar untuk petugas dengan invite_code admin
+        $petugas_query = Petugas::where("invite_code", $admin->invite_code)
+            ->withCount(['laporan as laporan_totals_selesai' => function ($query) {
+                $query->where('status', 'selesai');
+            }]);
+
+        // Pagination 5 per halaman
+        $petugas_paginate = (clone $petugas_query)->paginate(5);
+        $petugas = (clone $petugas_query)->latest()->get();
+
+        // Ambil total laporan selesai per petugas sebagai array
+        $petugas_laporan_totals_success = $petugas_query
+            ->pluck('laporan_totals_selesai')
+            ->toArray();
+
+
+        //----------LAPORAN
+
+
+        // Query laporan terbaru beserta relasinya
+        $laporan_query = Laporan::with(['admin', 'petugas', 'user']);
+        $laporan = (clone $laporan_query)->latest()->get();
+
+        // Hitung total laporan berdasarkan status
+        $laporan_status_data = $laporan_query
+            ->select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total')
+            ->toArray();
+        // contoh hasil: [2,3,5] → pending 2, ditugaskan 3, selesai 5
+
+        return view("admin.dashboard", compact("users", "user_paginate", 'user_laporan_totals', "admin", "laporan", "laporan_status_data", 'petugas', 'petugas_paginate', 'petugas_laporan_totals_success'));
     }
     public function profileView()
     {
@@ -106,13 +150,14 @@ class AdminController extends Controller
             'invite_code' => "SBR-" . $data['invite_code'],
         ]);
         // kami maunya admin harus validasi kembali jika memang sudha register
-        return  redirect()->route("admin.sign-in")->with("info", "accoun di buat , silahkan login ");
+        return  redirect()->route("admin.sign-in")->with("info", "akun di buat , silahkan login ");
     }
     public function logout(Request $request)
     {
 
-        $username = auth()->guard('admins')->user()->name;
-        if (!$username) {
+        $username = auth()->guard('admins')->user()->username;
+
+        if (!$username || $username == null) {
             return redirect()->back()->with("warning", "kamu bukan admins ");
         }
         Auth::logout();
@@ -134,18 +179,28 @@ class AdminController extends Controller
 
         return view("admin.laporan-id", ['petugas_id' => $petugas]);
     }
-    public function petugasIdPost(Request $request)
+    public function updatelaporan(Request $request)
     {
-        $admin_id = auth()->guard("admin")->user()->id;
-        $petugas_id = $request->query("id");
 
+        $validate = validator::make($request->all(), [
+
+            'petugas_id' => 'required|exists:petugas,id',
+            'laporan_id' => 'required|exists:laporans,id',
+        ]);
+
+        if ($validate->fails()) {
+            return redirect()->back()->with("error", "Validasi gagal. Silahkan periksa kembali input Anda.")->withErrors($validate)->withInput();
+        }
         // update laporan ke katagory di tugaskan dan tambahkan id petugas
-        $laporan = Laporan::where("admin_id", $admin_id)->first();
+        // $laporan = Laporan::where("admin_id", $admin_id)->first();
+
+        $data = $validate->validated();
+        $laporan = Laporan::find($data['laporan_id']);
 
         if ($laporan) {
-
             $laporan->status = "ditugaskan";
-            $laporan->petugas_id = $petugas_id;
+            $laporan->petugas_id = $data['petugas_id'];
+            $laporan->nama_petugas = Petugas::find($data['petugas_id'])->username;
             $laporan->updated_at = now();
             $laporan->save();
 
