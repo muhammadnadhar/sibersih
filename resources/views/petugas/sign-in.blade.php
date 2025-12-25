@@ -4,9 +4,9 @@
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="card shadow" style="width: 380px; background-color: #FFFFFF; border-radius: 16px;">
             <div class="card-body p-4">
-                <h3 class="text-center mb-4" style="color: #1E293B; font-weight: 700;">User Sign In</h3>
+                <h3 class="text-center mb-4" style="color: #1E293B; font-weight: 700;">Petugas Sign In</h3>
 
-                <form action="{{ route('petugas.sign-in') }}" method="POST">
+                <form action="{{ route('petugas.sign-in.post') }}" method="post">
                     @csrf
 
                     <div class="mb-3">

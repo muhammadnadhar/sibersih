@@ -10,7 +10,7 @@
 
     <!-- csss style include   -->
     @if ($css)
-        @vite('resources/css/base/index.css')
+        @vite($css)
     @endif
 
     <!-- Bootstrap 5 -->
@@ -39,7 +39,7 @@
             color: #F87171;
         }
 
-        #color-abu-bg {
+        .cl-abu-bg {
             color: #F8FAFC;
         }
 

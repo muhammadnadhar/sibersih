@@ -42,4 +42,11 @@ class Admin extends Authenticatable
     {
         return $this->hasMany(User::class, "admin_id", "id");
     }
+    /*
+    * admin punya hubungan ke setiap laporan yang di kelola nya
+    */
+    public function laporan()
+    {
+        return $this->hasMany(Laporan::class, "admin_id", "id");
+    }
 }

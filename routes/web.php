@@ -28,6 +28,12 @@ route::get("/block", [BaseController::class, "about"])->name("about");
 /* }); */
 /**/
 Route::prefix('user')->controller(UserController::class)->group(function () {
+    Route::get('/sign-in', 'signInView')->name('user.sign-in');
+    Route::post('/sign-in', 'signInPost')->name('user.sign-in.post');
+    Route::get('/sign-up', 'signUpView')->name('user.sign-up');
+    Route::post('/sign-up', 'signUpPost')->name('user.sign-up.post');
+
+    Route::post('/logout', 'logout')->name('user.logout');
 
     Route::middleware(UserLogin::class)->group(function () {
         Route::get('/', 'dashboard')->name('user.dashboard');
@@ -38,17 +44,16 @@ Route::prefix('user')->controller(UserController::class)->group(function () {
         Route::get("/history", "historyView")->name("user.history");
         Route::get("/laporan", 'laporanView')->name("user.laporan");
     });
-
-    Route::get('/sign-in', 'signInView')->name('user.sign-in');
-    Route::post('/sign-in', 'signInPost')->name('user.sign-in.post');
-    Route::get('/sign-up', 'signUpView')->name('user.sign-up');
-    Route::post('/sign-up', 'signUpPost')->name('user.sign-up.post');
-
-    Route::post('/logout', 'logout')->name('user.logout');
 });
 
 /// PETUGAS Page
 Route::prefix('petugas')->controller(PetugasController::class)->group(function () {
+    Route::get('/sign-in', 'signInView')->name('petugas.sign-in');
+    Route::post('/sign-in', 'signInPost')->name('petugas.sign-in.post');
+    Route::get('/sign-up', 'signUpView')->name('petugas.sign-up');
+    Route::post('/sign-up', 'signUpPost')->name('petugas.sign-up.post');
+
+    Route::post('/logout', 'logout')->name('petugas.logout');
 
     Route::middleware(PetugasLogin::class)->group(function () {
         Route::get('/', 'dashboard')->name('petugas.dashboard');
@@ -59,40 +64,33 @@ Route::prefix('petugas')->controller(PetugasController::class)->group(function (
         Route::get("/laporan", 'laporanView')->name("petugas.laporan");
         Route::get("/map", "mapView")->name("petugas.map");
     });
-
-    Route::get('/sign-in', 'signInView')->name('petugas.sign-in');
-    Route::post('/sign-in', 'signInPost')->name('user.sign-in.post');
-    Route::get('/sign-up', 'signUpView')->name('petugas.sign-up');
-    Route::post('/sign-up', 'signUpPost')->name('petugas.sign-up.post');
-
-    Route::post('/logout', 'logout')->name('petugas.logout');
 });
 
 /// ADMIN Page
 Route::prefix('admin')->controller(AdminController::class)->group(function () {
-
-    Route::middleware(AdminLogin::class)->group(function () {
-        Route::get('/', 'dashboard')->name('admin.dashboard');
-        Route::get("/laporan-id", 'laporanId')->name("admin.laporan.id");
-        Route::put("/update-laporan", 'updatelaporan')->name("admin.update.laporan");
-        Route::get("/petugas-id", "petugasId")->name("admin.petugas.id");
-        // Route::post("/petugas-id", "petugasIdPost")->name("admin.petugas.id.post");
-        Route::get('/profile', 'profileView')->name('admin.profile');
-        Route::get('/profile-edit', 'profileEditView')->name('admin.profile.edit');
-        Route::put("/update-password", 'passwordUpdatePut')->name('admin.password.update');
-    });
-
     Route::get('/sign-in', 'signInView')->name('admin.sign-in');
     Route::post('/sign-in', 'signInPost')->name('admin.sign-in.post');
     Route::get('/sign-up', 'signUpView')->name('admin.sign-up');
     Route::post('/sign-up', action: 'signUpPost')->name('admin.sign-up.post');
 
     Route::post('/logout', 'logout')->name('admin.logout');
+
+    Route::middleware(AdminLogin::class)->group(function () {
+        Route::get('/', 'dashboard')->name('admin.dashboard');
+        Route::get("/laporan-id", 'laporanId')->name("admin.laporan.id");
+        Route::put("/update-laporan", 'updatelaporan')->name("admin.update.laporan");
+        Route::get("/petugas-id", "petugasIdView")->name("admin.petugas.id");
+        // Route::post("/petugas-id", "petugasIdPost")->name("admin.petugas.id.post");
+        Route::get('/profile', 'profileView')->name('admin.profile');
+        Route::get('/profile-edit', 'profileEditView')->name('admin.profile.edit');
+        Route::put("/update-password", 'passwordUpdatePut')->name('admin.password.update');
+    });
 });
 
 
 // LAPORAN  | Handle Data laporan
 Route::prefix("/laporan")->controller(LaporanController::class)->group(function () {
     Route::post('/user', "userLaporan")->name("user.laporan.post");
-    Route::put('/petugas', "petugasLaporan")->name("petugas.laporan.post"); // petugas update laporan nya
+    Route::put('/petugas/{id}', "petugasLaporan")->name("petugas.laporan.post"); // petugas update laporan nya
+    Route::delete("/destroy/{id}", "destroy")->name("laporan.destroy");
 });

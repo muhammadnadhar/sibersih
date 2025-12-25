@@ -52,9 +52,14 @@ Ini middleware utama kami :
 > Ada sedikit masalah pada urutan migration yakni saat table petugas di buat , gagal atau terhalang dari table lain yang memiliki relasi dengan table petugas tersebut , solusi sekarang yaitu migrasi manual , tapi ini bukan solusi
 > -> sudah fixed
 
-### Note
+### laporan
 
--   untuk blade kawan kawan coba perhatikan di layout.blade.php dan dashboard.blade.php , ini buatnya bentuknya seperti di dashboard , bungkus di tag <x-layout> </x-layout>
+1. **status**
+
+-   selesai = petugas menyelesaikan dan mengubah status nya
+-   ditugaskan = sudah di kirim ke petugas terkait (invite_code)
+-   pending = masih belum di setujui admin
+-   urgent = laporan yang di selesaikan tidak bisa di terima admin ( kesalahan petugas )
 
 ### Color App
 

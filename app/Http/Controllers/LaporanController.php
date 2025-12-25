@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Laporan;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class LaporanController extends Controller
 {
@@ -58,16 +56,19 @@ class LaporanController extends Controller
     public function petugasLaporan(Request $request, $id)
     {
 
-        $request->validate([
+        $validated = validator::make($request->all(), [
             'status' => 'required|in:pending,diproses,ditugaskan,selesai',
             'image_laporan_selesai' => 'nullable|file|max:2048', // boleh null, tapi kalau ada harus valid
         ]);
 
-        $petugas = auth()->guard("petugas")->user();
+        if ($validated->fails()) {
+            return redirect()->back()->with("error", "ada yang salah")->withInput();
+        }
 
         // cari laporan berdasarkan id "laporan"
         $laporan = Laporan::findOrFail($id);
 
+        $data = $validated->validate();
         // Jika ada file baru diupload
         if ($request->hasFile('image_laporan_selesai')) {
 
@@ -77,20 +78,31 @@ class LaporanController extends Controller
             // }
 
             // Upload file baru | yang di mana sampah sudah di bersihkan
-            $file = $request->file('image_laporan_selesai');
-            $namaFile = time() . '_' . $file->getClientOriginalName();
+            $file_image = $data['image_laporan_selesai'];
+            $namaFile = time() . '_' . $file_image->getClientOriginalName();
             // $file->move(public_path('/storage/laporan-selesai'), $namaFile); // ini kurang konsisten
-            $file->storeAs('laporan-selesai', $namaFile, 'public');
+            $file_image->storeAs('laporan-selesai', $namaFile, 'public');
 
             // Simpan nama file baru ke database
             $laporan->image_laporan_selesai = $namaFile;
         }
 
         // Update status & petugas
-        $laporan->status = $request->status;
+        $laporan->status = $data['status'];
 
         $laporan->save();
 
         return back()->with('success', 'Laporan berhasil diupdate.');
+    }
+
+    public function destroy(Request $request, $id)
+    {
+
+
+        $laporan = Laporan::findOrFail($id);
+
+        $laporan->delete();
+
+        return redirect()->back()->with("success", "laporan dengan judul " . $laporan->judul . " berhasil di hapus");
     }
 }

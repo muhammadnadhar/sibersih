@@ -52,14 +52,14 @@
                         <div class="col-md-6">
                             <label class="text-muted mb-1">Username</label>
                             <div class="p-2 bg-abu rounded-3 cl-utama">
-                                {{ $user->username ?? '-' }}
+                                {{ $user->username ?? 'belum ada username' }}
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="text-muted mb-1">Nomor Telepon</label>
                             <div class="p-2 bg-abu rounded-3 cl-utama">
-                                {{ $user->phone ?? '-' }}
+                                {{ $user->phone ?? 'tidak ada phone' }}
                             </div>
                         </div>
 
@@ -79,33 +79,11 @@
                         Aktivitas Terakhir
                     </h6>
 
-                    @if (count($laporan_activity) == 0)
+                    @if (count($laporan_activity) != 0)
                         <ul class="list-unstyled mb-0 small">
                             @forelse ($laporan_activity as $item)
 
-                                {{-- <li class="d-flex align-items-start mb-3">
-                                                    <span class="badge bg-sukses-gradient shadow-sukses me-3 mt-1">✔</span>
-                                                    <div>
-                                                        <strong>Password diperbarui</strong>
-                                                        <div class="text-muted">2 hari yang lalu</div>
-                                                    </div>
-                                                </li>
-                        
-                                                <li class="d-flex align-items-start mb-3">
-                                                    <span class="badge bg-proses-gradient shadow-proses me-3 mt-1">!</span>
-                                                    <div>
-                                                        <strong>Login dari perangkat baru</strong>
-                                                        <div class="text-muted">5 hari yang lalu</div>
-                                                    </div>
-                                                </li>
-                        
-                                                <li class="d-flex align-items-start">
-                                                    <span class="badge bg-sidebar-gradient shadow-sidebar me-3 mt-1">i</span>
-                                                    <div>
-                                                        <strong>Profil diperbarui</strong>
-                                                        <div class="text-muted">1 minggu yang lalu</div>
-                                                    </div>
-                                                </li> --}}
+
                                 <li class="d-flex align-items-start mb-3">
                                     <span class="badge bg-sidebar-gradient shadow-sidebar me-3 mt-1">i</span>
                                     <div>
@@ -164,7 +142,7 @@
                         <div
                             class="card border-0 rounded-3 shadow-sukses bg-sukses-gradient text-white p-3 text-center">
                             <div class="small opacity-75">Laporan</div>
-                            <div class="fs-4 fw-semibold">12</div>
+                            <div class="fs-4 fw-semibold">{{ $laporan_total }}</div>
                         </div>
                     </div>
 
@@ -172,7 +150,7 @@
                         <div
                             class="card border-0 rounded-3 shadow-sidebar bg-sidebar-gradient text-white p-3 text-center">
                             <div class="small opacity-75">Aktivitas</div>
-                            <div class="fs-4 fw-semibold">28</div>
+                            <div class="fs-4 fw-semibold">{{ 0 }}</div>
                         </div>
                     </div>
 

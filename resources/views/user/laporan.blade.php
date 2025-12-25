@@ -69,7 +69,7 @@
                             <i class="bi bi-upload"></i> Upload Gambar
                         </label>
                         <input type="file" name="image_laporan" class="form-control">
-                        <small class="text-muted">Format: JPG, PNG. Maks 5MB</small>
+                        <small class="text-muted">Format: JPG, PNG, jpeg. Maks 5MB</small>
                         <p class="cl-urgent">
                             @error('image_laporan')
                                 {{ $message }}
@@ -83,9 +83,9 @@
                             <i class="bi bi-geo-alt"></i> Lokasi Kejadian
                         </label>
                         <input type="text" name="lokasi" class="form-control"
-                            placeholder="Masukkan lokasi sampah ditemukan (opsional)">
+                            placeholder="Masukkan lokasi sampah ditemukan " required>
                         <small class="text-muted">
-                            Bisa cek lokasi di menu <a href="{{ route('user.map') }}">Map</a>
+                            cek lokasi di menu <a class="link-info" href="{{ route('user.map') }}">Map</a>
                         </small>
                         <p class="cl-urgent">
                             @error('lokasi')
@@ -99,7 +99,7 @@
 
                     <!-- Tombol Submit -->
                     <div class="text-end">
-                        <button type="submit" class="btn bg-sukses-gradient cl-kartu shadow-sukses">
+                        <button type="submit" class="btn bg-sukses-gradient bg-sukses-hover cl-kartu shadow-sukses">
                             <i class="bi bi-send-fill"></i> Kirim Laporan
                         </button>
                     </div>

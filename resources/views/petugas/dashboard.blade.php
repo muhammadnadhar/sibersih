@@ -1,10 +1,10 @@
-<x-layout-petugas :isSidebar="true" :title="'dashboard'" :css="'resource/css/petugas/dashboard.css'" :js="'resource/js/petugas/dahsboard.js ?>'">
+<x-layout-petugas :isSidebar="true" :title="'dashboard | ' . $petugas->username" :js="'resources/js/petugas/dashboard.js'">
 
     <section class="container-fluid  py-4">
 
         {{-- HEADER --}}
         <div class="mb-4">
-            <h4 class="cl-utama fw-semibold mb-1">
+            <h4 class="cl-kartu fw-semibold mb-1">
                 Dashboard Petugas
             </h4>
             <p class="text-muted small mb-0">
@@ -68,54 +68,28 @@
                                 <th>ID</th>
                                 <th>Judul</th>
                                 <th>Status</th>
-                                <th>Prioritas</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#1021</td>
-                                <td class="fw-semibold cl-utama">Lampu Jalan Mati</td>
-                                <td>
-                                    <span class="badge bg-proses-gradient shadow-proses">
-                                        Proses
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-urgent-gradient shadow-urgent">
-                                        Tinggi
-                                    </span>
-                                </td>
-                            </tr>
 
-                            <tr>
-                                <td>#1018</td>
-                                <td class="fw-semibold cl-utama">Saluran Air Tersumbat</td>
-                                <td>
-                                    <span class="badge bg-sukses-gradient shadow-sukses">
-                                        Selesai
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-sidebar-gradient shadow-sidebar">
-                                        Normal
-                                    </span>
-                                </td>
-                            </tr>
 
-                            <tr>
-                                <td>#1013</td>
-                                <td class="fw-semibold cl-utama">Jalan Rusak</td>
-                                <td>
-                                    <span class="badge bg-proses-gradient shadow-proses">
-                                        Proses
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-urgent-gradient shadow-urgent">
-                                        Tinggi
-                                    </span>
-                                </td>
-                            </tr>
+                            @forelse ($laporan_terbaru as $lpr)
+                                <tr>
+                                    <td>#{{ $lpr->iteration }}</td>
+                                    <td class="fw-semibold cl-utama">{{ $lpr->judul }}</td>
+                                    <td>
+                                        <span class="badge bg-proses-gradient shadow-proses">
+                                            {{ $lpr->status }}
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                            @empty
+                                <div class="card shadow-sm border-0 rounded-4">
+                                    <p class="text-sm ">belum ada laporan yang di tugaskan </p>
+                                </div>
+                            @endforelse
                         </tbody>
                     </table>
 
@@ -137,8 +111,8 @@
                         </span>
                     </div>
 
-                    <canvas id="chartPetugasDashboard"></canvas>
-
+                    <canvas id="chartDataAktivitas"></canvas>
+                    <input type="hidden" id="dataChartAktivitas" value='@json($data_aktifitas_laporan)'>
                 </div>
 
             </div>

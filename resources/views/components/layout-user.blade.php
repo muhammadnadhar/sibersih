@@ -363,9 +363,11 @@
                 </ul>
             </nav>
         @endif
+        <div style="overflow-y: auto; height: 100vh; width: 100%;">
 
+            {{ $slot }}
+        </div>
 
-        {{ $slot }}
         <!-- Slot utama, isi halaman atau isi di dalamnya -->
     </main>
 

@@ -23,8 +23,6 @@ class AdminController extends Controller
 
 
         //----------USERS
-
-
         // Query dasar untuk user dengan invite_code admin
         $users_query = User::where("invite_code", $admin->invite_code)
             ->withCount('laporan'); // langsung hitung total laporan per user
@@ -40,8 +38,6 @@ class AdminController extends Controller
 
 
         //----------PETUGAS
-
-
         // Query dasar untuk petugas dengan invite_code admin
         $petugas_query = Petugas::where("invite_code", $admin->invite_code)
             ->withCount(['laporan as laporan_totals_selesai' => function ($query) {
@@ -59,8 +55,6 @@ class AdminController extends Controller
 
 
         //----------LAPORAN
-
-
         // Query laporan terbaru beserta relasinya
         $laporan_query = Laporan::with(['admin', 'petugas', 'user']);
         $laporan = (clone $laporan_query)->latest()->get();
@@ -69,9 +63,9 @@ class AdminController extends Controller
         $laporan_status_data = $laporan_query
             ->select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
-            ->pluck('total')
+            ->pluck('total', "status")
             ->toArray();
-        // contoh hasil: [2,3,5] → pending 2, ditugaskan 3, selesai 5
+        // contoh hasil: [2,3,5,5] → pending 2, ditugaskan 3, selesai 5 , urgent 5
 
         return view("admin.dashboard", compact("users", "user_paginate", 'user_laporan_totals', "admin", "laporan", "laporan_status_data", 'petugas', 'petugas_paginate', 'petugas_laporan_totals_success'));
     }
@@ -105,17 +99,22 @@ class AdminController extends Controller
 
     public function signInPost(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'username' => 'required|string|min:3|max:30',
             'password' => 'required|string|min:6'
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min'      => 'Password minimal 6 karakter.',
         ]);
+
 
         $cridentias = $request->only("username", "password");
         if (Auth::guard("admins")->attempt($cridentias)) {
             $request->session()->regenerate(); // CEGAH session fixation
             return redirect()->route('admin.dashboard')->with("info", "welcome admin");
         }
-        return back()->withErrors(['error' => 'Nama atau password salah.']);
+        return back()->with(['error' => 'Nama atau password salah.'])->withInput();
     }
     public function signUpView()
     {
@@ -160,32 +159,33 @@ class AdminController extends Controller
         if (!$username || $username == null) {
             return redirect()->back()->with("warning", "kamu bukan admins ");
         }
-        Auth::logout();
+        Auth::guard("admins")->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route("index")->with('info', $username . " admin telah logout");
+        return redirect()->route("index")->with('info', $username . "  telah logout");
     }
 
 
     public function petugasIdView(Request $request)
     {
+        $admin = auth()->guard("admins")->user();
         $petugas_id = $request->query("id");
         // ambil data petugas dan user{
         /* $laporan_id  = ::with(["user", "petugas"])->findOrFail(id: $id); // jika gagal 404 */
         // ambil 1 data berdasarkan 1 data admin dan dapatkan 1 data
-        $petugas = Admin::with("petugas")->find(auth()->guard("admin")->user()->id)->latest()->find(id: $petugas_id)->get();
+        $petugas = $admin->with("petugas")->find($petugas_id);
 
-        return view("admin.laporan-id", ['petugas_id' => $petugas]);
+        return view("admin.petugas-id", ['petugas' => $petugas]);
     }
     public function updatelaporan(Request $request)
     {
-
+        $admin = auth()->guard("admins")->user();
         $validate = validator::make($request->all(), [
 
             'petugas_id' => 'required|exists:petugas,id',
-            'laporan_id' => 'required|exists:laporans,id',
+            'laporan_id' => 'required|exists:laporan,id',
         ]);
 
         if ($validate->fails()) {
@@ -195,7 +195,7 @@ class AdminController extends Controller
         // $laporan = Laporan::where("admin_id", $admin_id)->first();
 
         $data = $validate->validated();
-        $laporan = Laporan::find($data['laporan_id']);
+        $laporan = $admin->laporan()->find(id: $data['laporan_id']);
 
         if ($laporan) {
             $laporan->status = "ditugaskan";

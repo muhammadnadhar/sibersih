@@ -16,6 +16,7 @@
                             'bg-success text-white' => $laporan->status == 'selesai',
                             'bg-warning text-dark' => $laporan->status == 'pending',
                             'bg-primary text-white' => $laporan->status == 'ditugaskan',
+                            'bg-urgent text-white' => $laporan->status == 'urgent',
                         ])>
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
@@ -23,10 +24,11 @@
                                     <p class="card-text mb-0 small">Tanggal: {{ $laporan->tanggal_laporan }}</p>
                                 </div>
                                 <span
-                                    class="badge rounded-pill 
-                    @if ($laporan->status == 'selesai') bg-light text-success 
-                    @elseif($laporan->status == 'pending') bg-light text-warning 
-                    @else bg-light text-primary @endif
+                                    class="badge rounded-pill cl-kartu 
+                    @if ($laporan->status == 'selesai') bg-success 
+                    @elseif($laporan->status == 'pending') bg-proses  
+                    @elseif($laporan->status == 'ditugaskan') bg-sidebar
+                    @else bg-urgent @endif
                 fw-semibold px-3 py-2">
                                     {{ ucfirst($laporan->status) }}
                                 </span>

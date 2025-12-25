@@ -1,4 +1,4 @@
-<x-layout-user :title="'SIBERSIH'" :isSidebar="true" :js="'/resource/js/user/dashboard.js'">
+<x-layout-user :title="'SIBERSIH'" :isSidebar="true" :js="'resources/js/user/dashboard.js'">
 
     <div class="container my-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
@@ -62,6 +62,8 @@
                     <div class="card-body">
                         <h6 class="fw-semibold text-secondary mb-3">Laporan Mingguan</h6>
                         <canvas id="laporanChart"></canvas>
+                        <input type="hidden" id="data-laporan-mingguan" value='@json($data_laporan_mingguan ?? [])'>
+
                     </div>
                 </div>
             </div>
@@ -70,6 +72,7 @@
                     <div class="card-body">
                         <h6 class="fw-semibold text-secondary mb-3">Status Laporan</h6>
                         <canvas id="statusChart"></canvas>
+                        <input type="hidden" id="data-laporan-status" value='@json($data_status_laporan ?? [])'>
                     </div>
                 </div>
             </div>
@@ -95,14 +98,7 @@
                         @endforelse
 
 
-                        {{-- <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-dark">Tumpukan Sampah Pasar</span>
-                            <span class="badge bg-warning text-white rounded-pill">Proses</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-dark">Pembersihan Taman</span>
-                            <span class="badge bg-success rounded-pill">Selesai</span>
-                        </div> --}}
+
                     </div>
                 </div>
             </div>

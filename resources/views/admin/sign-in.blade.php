@@ -11,15 +11,23 @@
                     <div class="mb-3">
                         <label for="username" class="form-label cl-utama">Username</label>
                         <input type="text" id="username" name="username"
-                            class="form-control rounded-2 border-secondary" placeholder="Masukkan username" />
+                            class="form-control rounded-2 border-secondary @error('username') is-invalid @enderror"
+                            placeholder="Masukkan username" value="{{ old('username') }}" required minlength="3"
+                            maxlength="30" />
+                        @error('username')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="password" class="form-label cl-utama">Password</label>
                         <input type="password" id="password" name="password"
-                            class="form-control rounded-2 border-secondary" placeholder="Masukkan password" />
+                            class="form-control rounded-2 border-secondary @error('password') is-invalid @enderror"
+                            placeholder="Buat password" required minlength="6" />
+                        @error('password')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
-
 
                     <button type="submit" class="btn bg-sidebar text-white w-100 mt-2 rounded-3">Login</button>
 

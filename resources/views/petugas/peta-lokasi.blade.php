@@ -1,9 +1,9 @@
-<x-layout-petugas :title="'Map'">
-    <section class="container-fluid bg-abu py-4">
+<x-layout-petugas :title="'Map'" :isSidebar="true">
+    <section class="container-fluid  py-4">
 
         <div class="d-flex align-items-center justify-content-between mb-4">
             <div>
-                <h4 class="cl-utama fw-semibold mb-1">
+                <h4 class="cl-kartu fw-semibold mb-1">
                     <i class="bi bi-geo-alt-fill cl-sidebar me-2"></i>
                     Peta Lokasi
                 </h4>
@@ -20,7 +20,7 @@
         <div class="bg-kartu rounded-4 shadow-kartu p-3">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="small cl-utama">
+                <div class="small cl-kartu">
                     <i class="bi bi-info-circle me-1 cl-sidebar"></i>
                     Data peta akan diperbarui otomatis
                 </div>
@@ -43,7 +43,6 @@
             <div class="mt-3 small text-muted text-center">
                 <i class="bi bi-layers me-1"></i>
                 Integrasi Google Maps akan menggunakan
-                <strong>spatie/laravel-google-maps</strong>
             </div>
 
         </div>

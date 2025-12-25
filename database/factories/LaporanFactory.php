@@ -30,14 +30,19 @@ class LaporanFactory extends Factory
             'deskripsi' => $this->faker->paragraph(),
             'nama_pelapor' => $user ? $user->username : 'User Default',
             'nama_petugas' => $petugas ? $petugas->username : null,
-            'image_laporan' => 'public/image/default/default.jpg',
+            'image_laporan' => 'public/image/default.webp',
             'image_laporan_selesai' => null,
-            'status' => $this->faker->randomElement(['pending', 'ditugaskan', 'selesai']),
+            'status' => $this->faker->randomElement(['pending', 'ditugaskan', 'selesai', 'urgent']),
             'lokasi' => $this->faker->address(),
             'tanggal_laporan' => now(),
             'admin_id' => $admin ? $admin->id : 1,
             'petugas_id' => $petugas ? $petugas->id : null, // petugas memang tidka ada secara default
             'user_id' => $user ? $user->id : 1,
+
+            // gunakan created_at acak 7 hari terakhir
+            'created_at' => $this->faker->dateTimeBetween('-6 days', 'now'),
+            'updated_at' => now(),
+
         ];
     }
 }

@@ -18,11 +18,12 @@ class AdminLogin
     {
 
         if (Auth::check()) {
-            return redirect()->route("user.dashboard")->with("info", "kamu adalah user bukan admin");
+            $user = auth()->user();
+            return redirect()->route("user.dashboard")->with("info", "kamu adalah user bukan admin" . $user);
         }
         // jika yang login adalah petugas
         if (Auth::guard('petugas')->check()) {
-            $petugas = Auth::guard('petugas')->user();
+            $petugas = auth()->guard('petugas')->user();
             return redirect()->route('petugas.dashboard')
                 ->with('info', 'Kamu petugas, bukan  admin (' . $petugas->username . ')');
         }

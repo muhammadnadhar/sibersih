@@ -1,4 +1,4 @@
-<x-layout-base :title="'Main'" :js="'/resource/js/base/index.js'" css="css/base/index.css" :isSidebar='true'>
+<x-layout-base :title="'Main'" :js="'/resources/js/base/index.js'" css="resources/css/base/index.css" :isSidebar='true'>
     <div class=" container-fluid min-vh-100 d-flex align-items-center justify-content-center">
 
         <div class="text-center border-0 rounded-4 shadow-lg p-5" style="max-width: 1000px; width: 100%;">
@@ -45,10 +45,10 @@
             </div>
 
             <div class="d-flex mt-2 justify-content-center gap-3">
-                <a href="{{ route('about') }}" class="text-decoration-none text-primary" title="Website">
+                {{-- <a href="{{ route('about') }}" class="text-decoration-none text-primary" title="Website">
                     <i class="bi bi-info-square-fill"></i>
                 </a>
-                <small class="text-muted d-block mb-2">about</small>
+                <small class="text-muted d-block mb-2">about</small> --}}
                 {{-- <a href="#" class="text-decoration-none text-success" title="Email">
                         <i class="bi bi-envelope fs-5"></i>
                     </a>

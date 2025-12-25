@@ -21,8 +21,8 @@
                     <div class="bg-kartu rounded-4 shadow-kartu overflow-hidden">
 
 
-                        <div class="bg-sidebar-gradient p-4 text-center">
-                            <div class="mx-auto mb-2 rounded-circle bg-kartu shadow-kartu
+                        <div class="bg-kartu-gradient p-4 text-center">
+                            <div class="mx-auto mb-2 rounded-circle shadow-kartu
                                 d-flex align-items-center justify-content-center"
                                 style="width:90px;height:90px;">
                                 <img class="w-100 h-100 rounded-circle" src="{{ asset($admin->avatar) }}"
@@ -108,30 +108,36 @@
                         </div>
 
                         {{-- ACTION --}}
-                        <div class="mt-4 d-flex gap-2">
-
-                            <a href="" class="btn bg-sidebar-gradient text-white shadow-sidebar">
-                                <i class="bi bi-pencil-square me-1"></i>
+                        <div class="mt-4 d-flex flex-wrap gap-2 justify-content-center">
+                            <!-- Edit Profil -->
+                            <a href="#"
+                                class="btn btn-outline-dark shadow-sm px-3 py-2 d-flex align-items-center">
+                                <i class="bi bi-pencil-square me-2"></i>
                                 Edit Profil
                             </a>
 
-                            <a href="#" class="btn bg-urgent-gradient text-white shadow-urgent">
-                                <i class="bi bi-shield-lock me-1"></i>
+                            <!-- Keamanan -->
+                            <a href="#"
+                                class="btn btn-outline-dark shadow-sm px-3 py-2 d-flex align-items-center">
+                                <i class="bi bi-shield-lock me-2"></i>
                                 Keamanan
                             </a>
-                            <button class="btn bg-sidebar-gradient text-white shadow-sm" data-bs-toggle="modal"
-                                data-bs-target="#changePasswordModal">
-                                <i class="bi bi-key-fill me-2"></i>Ganti Password
+
+                            <!-- Ganti Password -->
+                            <button class="btn btn-outline-dark shadow-sm px-3 py-2 d-flex align-items-center"
+                                data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                <i class="bi bi-key-fill me-2"></i>
+                                Ganti Password
                             </button>
 
-                            <button class="btn bg-urgent-gradient text-white shadow-urgent"data-bs-toggle="modal"
-                                data-bs-target="#logoutModal">
-                                <i class="bi bi-door-closed"></i>
-                                logout
+                            <!-- Logout -->
+                            <button class="btn btn-outline-dark shadow-sm px-3 py-2 d-flex align-items-center"
+                                data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                <i class="bi bi-door-closed me-2"></i>
+                                Logout
                             </button>
-
-
                         </div>
+
 
                     </div>
 

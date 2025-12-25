@@ -24,11 +24,29 @@ class PetugasController extends Controller
         $total_laporan_selesai = (clone $laporan)->where("status", "selesai")->count();
         $total_laporan_pending = (clone $laporan)->where("status", "pending")->count();
 
-        $data = [
-            "total_laporan_ditugaskan" => $total_laporan_ditugaskan,
-            "totla_laporan_selesai" => $total_laporan_selesai,
-            "total_laporan_pending" => $total_laporan_pending,
+        // chart data 
+        // data laporan semua yang berkaitan
+        $data_aktifitas_laporan = $petugas->laporan()->selectRaw('status, COUNT(*) as total')
+            ->whereIn('status', ['pending', 'selesai', 'ditugaskan', "urgent"])
+            ->groupBy('status')
+            ->pluck('total', 'status');
+        // hasil :
+        //     [
+        //   "pending"     => 2,
+        //   "success"     => 3,
+        //   "ditugaskan"  => 5
+        // "urgent" => 1
+        // ]
 
+        $laporan_terbaru = $petugas->laporan()->latest()->limit(5)->get(); // sudah dengan katagory id karena di admin
+
+        $data = [
+            "petugas" => $petugas,
+            "total_laporan_ditugaskan" => $total_laporan_ditugaskan,
+            "total_laporan_selesai" => $total_laporan_selesai,
+            "total_laporan_pending" => $total_laporan_pending,
+            "data_aktifitas_laporan" => $data_aktifitas_laporan,
+            "laporan_terbaru" => $laporan_terbaru,
         ];
 
         return view("petugas.dashboard", $data);
@@ -37,9 +55,17 @@ class PetugasController extends Controller
     {
         $petugas = auth()->guard("petugas")->user();
 
+        $total_laporan_selesai = $petugas->laporan()->where("status", "selesai")->count();
+        $total_laporan_ditugaskan = $petugas->laporan()->where("status", "ditugaskan")->count();
+        $total_laporan_urgent = $petugas->laporan()->where("status", "urgent")->count();
+
+
 
         return view("petugas.profile")->with([
             "petugas" => $petugas,
+            "total_laporan_selesai" => $total_laporan_selesai,
+            "total_laporan_urgent" => $total_laporan_urgent,
+            "total_laporan_ditugaskan" => $total_laporan_ditugaskan,
         ]);
     }
     public function profileEditView()
@@ -65,15 +91,15 @@ class PetugasController extends Controller
         ]);
 
 
-        // $cridentials = $request->only("username", "password"); // sesuai nama table
+        $cridentials = $request->only("username", "password"); // sesuai nama table
 
-        if (Auth::attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
+        if (Auth::guard("petugas")->attempt($cridentials)) {
 
             $request->session()->regenerate();
-            return redirect()->route("petugas.dashboard")->with("info", "selamat datanag petugas" . $request->user()->name);
+            return redirect()->route("petugas.dashboard")->with("info", "selamat datang " . $cridentials["username"]);
         }
         return back()
-            ->withInput($request->only('username'))
+            ->withInput($request->only('username', "password"))
             ->with('error', 'Login gagal. Username atau password salah.');
     }
 
@@ -90,7 +116,6 @@ class PetugasController extends Controller
             'invite_code' => 'required|string',
             'password' => 'required|min:6',
         ]);
-        // auth() sama denagn Auth
 
         if (auth()->guard("petugas")->check()) {
             return redirect()->route("petugas.dashboard")->with("info", "selamat datang" . $request->input("username"));
@@ -101,8 +126,8 @@ class PetugasController extends Controller
         }
 
         $admin = Admin::where("invite_code", "SBR-" . $validated["invite_code"]);
-        $admin_id = $admin->pluck("id")->first();
-        $admin_code = $admin->pluck("invite_code")->first();
+        $admin_id = (clone $admin)->pluck("id")->first();
+        $admin_code = (clone $admin)->pluck("invite_code")->first();
 
 
         if (!$admin || $admin_code !== "SBR-" . $validated["invite_code"]) {
@@ -127,14 +152,14 @@ class PetugasController extends Controller
     public function logout(Request $request)
     {
 
-        $username = auth()->guard("petugas")->user()->name;
+        $username = auth()->guard("petugas")->user()->username;
 
-        Auth::logout();
+        Auth::guard("petugas")->logout();
 
         $request->session()->regenerateToken();
         $request->session()->invalidate();
 
-        return redirect()->route("index")->with('info', 'Anda telah logout.' . $username);
+        return redirect()->route("index")->with('info', 'Anda telah logout ' . $username);
     }
 
     // untuk handle nya ada di  controller Laporan
@@ -142,7 +167,7 @@ class PetugasController extends Controller
 
     {
         $petugas = auth()->guard("petugas")->user();
-        $laporan_ditugaskan = Laporan::with("petugas")->find(id: $petugas->id)->where("status", "ditugaskan")->get();
+        $laporan_ditugaskan = $petugas->laporan()->where("status", "ditugaskan")->get();
 
         return view("petugas.laporan", compact("laporan_ditugaskan"));
     }
@@ -150,9 +175,10 @@ class PetugasController extends Controller
     public function historyView()
     {
         $petugas = auth()->guard("petugas")->user();
-        $laporan_selesai = Laporan::with("petugas")->find(id: $petugas->id)->where("status", "selesai")->get();
+        $laporan_status = $petugas->laporan()->where("status", ["selesai", "ditugaskan"])->get();
 
-        return view("petugas.history", compact("laporan_selesai"));
+
+        return view("petugas.history", compact("laporan_status"));
     }
     public function mapView()
     {

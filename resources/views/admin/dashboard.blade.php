@@ -24,7 +24,7 @@
                         </div>
                     @else
                         <div class="card shadow-kartu bg-kartu h-100">
-                            <div class="card-body p-0">
+                            <div class="card-body p-0 table-responsive">
                                 <table class="table table-bordered table-striped mb-0">
                                     <thead class="bg-sidebar-gradient text-white">
                                         <tr>
@@ -74,7 +74,7 @@
         </section>
 
         {{-- PETUGAS SECTION --}}
-        <section id="petugas" class="mb-5">
+        <section id="petugas" style="margin-top: 5rem">
             <div class="row g-3">
 
                 <div class="col-12 col-md-4">
@@ -82,7 +82,7 @@
 
                     <div class="card shadow-kartu bg-kartu-gradient h-100 p-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <h6 class="cl-utama m-0">Petugas Aktif</h6>
+                            <h6 class="cl-utama m-0">Petugas laporan selesai </h6>
                             <span class="badge bg-sidebar-gradient shadow-sidebar">Live</span>
                         </div>
 
@@ -110,13 +110,13 @@
                         </div>
                     @else
                         <div class="card shadow-kartu bg-kartu h-100">
-                            <div class="card-body p-0">
+                            <div class="card-body p-0 table-responsive">
                                 <table class="table table-bordered table-striped mb-0 align-middle">
                                     <thead class="bg-sidebar-gradient text-white">
                                         <tr>
                                             <th width="60">#</th>
                                             <th>Nama</th>
-                                            <th>addres</th>
+                                            <th>email</th>
                                             <th>Details</th>
 
                                         </tr>
@@ -129,12 +129,12 @@
                                                     {{ $pt->username }}
                                                 </td>
                                                 <td>
-                                                    <i class="bi bi-house-door-fill"></i>
-                                                    {{ $pt->address }}
+                                                    <i class="bi bi-envelope"></i>
+                                                    {{ $pt->emails ?? 'belum di isi' }}
                                                 </td>
 
                                                 <td class="text-center">
-                                                    <a href="{{ route('admin.laporan.id', ['id' => $pt->id]) }}"
+                                                    <a href="{{ route('admin.petugas.id', ['id' => $pt->id]) }}"
                                                         class="btn btn-sm bg-utama-hover text-white shadow-sm">
                                                         <i class="bi bi-info-circle-fill"></i>
                                                     </a>
@@ -152,7 +152,7 @@
         </section>
 
         {{-- LAPORAN SECTION --}}
-        <section id="laporan" class="mb-5">
+        <section id="laporan" style="margin-top: 5rem">
             <div class="row g-3">
                 <div class="col-12 col-md-8">
                     <h4 class="mb-3 cl-utama">Laporan</h4>
@@ -169,8 +169,9 @@
                             </div>
                         </div>
                     @else
-                        <div class="card shadow-kartu bg-kartu h-100">
-                            <div class="card-body p-0">
+                        <div class="card shadow-kartu bg-kartu h-100 table-responsive overflow-auto"
+                            style="max-height: 35rem">
+                            <div class="card-body p-0 table-responsive">
                                 <table class="table table-bordered table-striped mb-0 align-middle">
                                     <thead class="bg-sidebar-gradient text-white">
                                         <tr>
@@ -179,6 +180,7 @@
                                             <th>Pelapor</th>
                                             <th>Petugas</th>
                                             <th>Tugaskan</th>
+                                            <th>Aksi</th>
                                             <th width="120">Status</th>
                                         </tr>
                                     </thead>
@@ -193,12 +195,17 @@
                                                     {{ $lp->nama_pelapor }}
                                                 </td>
                                                 {{-- di atur jika sudha di aprof oleh admin  --}}
-                                                <td>{{ $lp->nama_petugas ?? '-' }}</td>
+                                                <td>{{ $lp->nama_petugas ?? 'click tugaskan' }}</td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#updateLaporan" data-id="{{ $lp->id }}">
-                                                        Tugaskan
-                                                    </button>
+                                                    @if ($lp->status == 'pending')
+                                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#updateLaporan"
+                                                            data-id="{{ $lp->id }}">
+                                                            Tugaskan
+                                                        </button>
+                                                    @else
+                                                        -
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     <span
@@ -211,7 +218,20 @@
                                                         {{ $lp->status }}
                                                     </span>
                                                 </td>
+                                                <td class="d-flex gap-2">
+                                                    <button type="button" class="btn btn-sm text-denger">
+                                                        <i class="bi bi-info-circle"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm text-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal" data-id="{{ $lp->id }}"
+                                                        data-judul="{{ $lp->judul }}">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+
+
                                             </tr>
+                                            {{-- -modal laporan delete --}}
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -221,7 +241,7 @@
                 </div>
 
                 <!-- CHART LAPORAN -->
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-4" style="max-height: 35rem">
                     <h4 class="mb-3 cl-utama">Statistik</h4>
 
                     <div class="card shadow-kartu bg-kartu-gradient h-100 p-3">
@@ -243,37 +263,112 @@
 
 
     {{-- MODAL Start  --}}
-    <div class="modal fade" id="updateLaporan" tabindex="-1" aria-labelledby="logoutModalLabel"
+    {{-- Modal Update Laporan --}}
+    <div class="modal fade" id="updateLaporan" tabindex="-1" aria-labelledby="updateLaporanLabel"
         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="logoutModalLabel">Tugaskan Petugas</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-kartu-gradient shadow-kartu rounded-4">
+
+                {{-- HEADER --}}
+                <div class="modal-header bg-utama-gradient text-white rounded-top-4">
+                    <h5 class="modal-title fw-bold" id="updateLaporanLabel">
+                        <i class="bi bi-person-check-fill me-1"></i> Tugaskan Petugas
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
 
-                <div class="modal-body">
-                    <p>Apakah Anda yakin ingin menugaskan petugas ini?</p>
-                </div>
+                {{-- BODY --}}
+                <div class="modal-body cl-utama">
+                    <p class="mb-3">
+                        Pilih petugas untuk menangani laporan ini.
+                    </p>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <form action="{{ route('admin.update.laporan') }}" method="POST">
                         @csrf
                         @method('PUT')
-                        {{-- petugas yang di tugaskan kirim id nya --}}
-                        <select name="petugas_id" id="petugas_id" class="form-select mb-2" required>
-                            @foreach ($petugas as $pt)
-                                <option value="{{ $pt->id }}">{{ $pt->username }}</option>
-                            @endforeach
-                        </select>
+
+                        {{-- Pilih Petugas --}}
+                        <div class="mb-3">
+                            <label for="petugas_id" class="form-label fw-semibold">
+                                <i class="bi bi-person-fill me-1"></i> Petugas
+                            </label>
+                            <select name="petugas_id" id="petugas_id" class="form-select border-secondary" required>
+                                <option value="">-- Pilih Petugas --</option>
+                                @foreach ($petugas as $pt)
+                                    <option value="{{ $pt->id }}">
+                                        {{ $pt->username }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Hidden laporan id --}}
                         <input type="hidden" name="laporan_id" id="laporan_id">
-                        <button type="submit" class="btn btn-primary">Tugaskan</button>
+
+                        {{-- FOOTER / ACTION --}}
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn bg-urgent text-white shadow-urgent"
+                                data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Batal
+                            </button>
+
+                            <button type="submit" class="btn bg-sidebar text-white shadow-sidebar">
+                                <i class="bi bi-check-circle-fill"></i> Tugaskan
+                            </button>
+                        </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
+
+
+    {{-- -laporan destroy --}}
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-kartu-gradient shadow-kartu rounded-4">
+
+                <!-- Header -->
+                <div class="modal-header bg-urgent-gradient text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Hapus Laporan
+                    </h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body cl-utama">
+                    <p>
+                        Ketik <strong id="laporanJudulText"></strong> untuk konfirmasi penghapusan.
+                    </p>
+
+                    <input type="text" id="confirmInput" class="form-control" placeholder="Ketik judul laporan">
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+
+                    {{-- action di handle di javascrip --}}
+                    <form id="deleteForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" id="deleteBtn" disabled>
+                            <i class="bi bi-trash-fill"></i> Hapus
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
 
     {{-- MODAL END  --}}
 

@@ -16,6 +16,12 @@ class UserLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Jika admin  yang  → tolak
+        if (Auth::guard('admins')->check()) {
+            $admin = auth()->guard('admins')->user();
+            return redirect()->route('admin.dashboard')
+                ->with('info', 'kamu adalah  admin' . $admin);
+        }
         // jika yang login adalah petugas
         if (Auth::guard('petugas')->check()) {
             $petugas = Auth::guard('petugas')->user();
@@ -23,14 +29,8 @@ class UserLogin
                 ->with('info', 'Kamu petugas, bukan  user (' . $petugas->username . ')');
         }
 
-     // Jika admin  yang  → tolak
-        if (Auth::guard('admins')->check()) {
-            return redirect()->route('admin.dashboard')
-                ->with('info', 'kamu login sebagai admin');
-        }
-
-        if(!Auth()->check()){
-            return redirect()->route("user.sign-in")->with("info","silakah login terlebih dahulu");
+        if (!Auth()->guard("users")->check()) { // default nya web , tapi sudah saya uabh ke users agar lebih jelas
+            return redirect()->route("user.sign-in")->with("info", "silakah login terlebih dahulu");
         }
 
 

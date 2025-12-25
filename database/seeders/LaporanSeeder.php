@@ -14,6 +14,6 @@ class LaporanSeeder extends Seeder
     public function run(): void
     {
         // Buat 30 laporan dummy
-        Laporan::factory()->count(10)->create();
+        Laporan::factory()->count(15)->create();
     }
 }

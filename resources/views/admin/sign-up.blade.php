@@ -71,7 +71,8 @@
                     @endif
 
                     {{-- Submit Button --}}
-                    <button type="submit" class="btn bg-sukses text-white w-100 mt-2 rounded-3">Register</button>
+                    <button type="submit"
+                        class="btn cl-kartu bg-sukses shadow-sukses .bg-sukses-hovertext-white w-100 mt-2 rounded-3">Register</button>
                 </form>
 
                 <!-- Info Tambahan -->

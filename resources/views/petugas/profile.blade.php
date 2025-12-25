@@ -25,7 +25,9 @@
                         <div class="mx-auto mb-2 rounded-circle bg-kartu shadow-utama
                                 d-flex align-items-center justify-content-center"
                             style="width:90px;height:90px;">
-                            <i class="bi bi-person-badge fs-1 cl-utama"></i>
+                            {{-- <i class="bi bi-person-badge fs-1 cl-utama"></i> --}}
+                            <img class="rounded-circle" style="width: 100%; height: 100%;" src="{{ $petugas->avatar }}"
+                                alt="{{ $petugas->username ?? 'nama petugas' }}">
                         </div>
 
                         <h6 class="fw-semibold mb-0 cl-utama">
@@ -41,14 +43,14 @@
                     <div class="small cl-utama">
 
                         <div class="mb-2 d-flex justify-content-between">
-                            <span class="opacity-75">ID Petugas</span>
-                            <strong>#PTG-001</strong>
+                            <span class="opacity-75">Grupe Code</span>
+                            <strong>{{ $petugas->invite_code }}</strong>
                         </div>
 
-                        <div class="mb-2 d-flex justify-content-between">
-                            <span class="opacity-75">Unit</span>
-                            <strong>Lapangan</strong>
-                        </div>
+                        <!-- <div class="mb-2 d-flex justify-content-between"> -->
+                        <!--     <span class="opacity-75">Unit</span> -->
+                        <!--     <strong>Lapangan</strong> -->
+                        <!-- </div> -->
 
                         <div class="mb-2 d-flex justify-content-between">
                             <span class="opacity-75">Status</span>
@@ -77,21 +79,21 @@
                         <div class="col-md-6">
                             <label class="text-muted mb-1">Nama Lengkap</label>
                             <div class="p-2 bg-abu rounded-3">
-                                {{ $petugas->username ?? '-' }}
+                                {{ $petugas->fullname ?? 'belum di isi' }}
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="text-muted mb-1">Email</label>
                             <div class="p-2 bg-abu rounded-3">
-                                {{ $petugas->email ?? '-' }}
+                                {{ $petugas->email ?? 'belum di isi' }}
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="text-muted mb-1">No. Telepon</label>
                             <div class="p-2 bg-abu rounded-3">
-                                {{ $petugas->phone ?? '-' }}
+                                {{ $petugas->phone ?? 'belum di isi' }}
                             </div>
                         </div>
 
@@ -105,15 +107,17 @@
                     </div>
 
                     <div class="mt-4 d-flex gap-2">
-                        <a href="#" class="btn bg-utama-gradient text-white shadow-utama">
+                        <a href="{{ route('petugas.profile.edit') }}"
+                            class="btn bg-utama-gradient text-white shadow-utama">
                             <i class="bi bi-pencil-square me-1"></i>
                             Edit Data
                         </a>
 
-                        <a href="#" class="btn bg-proses-gradient shadow-proses text-dark">
+                        <button data-bs-target="#verivikasiModal" data-bs-toggle
+                            class="btn bg-proses-gradient shadow-proses text-dark">
                             <i class="bi bi-shield-check me-1"></i>
                             Verifikasi
-                        </a>
+                        </button>
                         <button class="btn bg-urgent-gradient text-white shadow-urgent btn-sm"data-bs-toggle="modal"
                             data-bs-target="#logoutModal">
                             <i class="bi bi-door-closed"></i>
@@ -134,19 +138,19 @@
                         Statistik Tugas
                     </h6>
 
-                    <div class="mb-3 p-3 rounded-3 bg-sukses-gradient text-white shadow-sukses">
+                    <div class="mb-3 p-3 rounded-3 border bg-kartu-gradient text-dark ">
                         <div class="small opacity-75">Laporan Selesai</div>
-                        <div class="fs-4 fw-semibold">128</div>
+                        <div class="fs-4 fw-semibold">{{ $total_laporan_selesai }}</div>
                     </div>
 
-                    <div class="mb-3 p-3 rounded-3 bg-proses-gradient text-dark shadow-proses">
-                        <div class="small opacity-75">Dalam Proses</div>
-                        <div class="fs-4 fw-semibold">7</div>
+                    <div class="mb-3 p-3 rounded-3 border bg-kartu-gradient text-dark ">
+                        <div class="small opacity-75">Ditugaskan</div>
+                        <div class="fs-4 fw-semibold">{{ $total_laporan_ditugaskan }}</div>
                     </div>
 
-                    <div class="p-3 rounded-3 bg-urgent-gradient text-white shadow-urgent">
+                    <div class="p-3 rounded-3  border bg-kartu-gradient text-dark ">
                         <div class="small opacity-75">Urgent</div>
-                        <div class="fs-4 fw-semibold">2</div>
+                        <div class="fs-4 fw-semibold">{{ $total_laporan_urgent }}</div>
                     </div>
 
                 </div>
@@ -159,6 +163,7 @@
 
 
     {{-- MODAL start --}}
+    {{-- Modal logout --}}
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -174,6 +179,31 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <form action="{{ route('petugas.logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- modal Verifikasi  --}}
+    <div class="modal fade" id="verivikasiModal" tabindex="-1" aria-labelledby="verivikasiModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="verivikasiModalLabel">Are you sure</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body d-flex gap-2 justify-content-center">
+                    <i class="bi bi-person-check"></i>
+                    <p>anda terverifikasi</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form action="{{ route('admin.logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-primary">Logout</button>
                     </form>

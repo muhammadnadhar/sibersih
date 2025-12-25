@@ -18,7 +18,7 @@ class PetugasLogin
     {
 
         // Jika user biasa login → tolak
-        if (Auth::check()) { // guard users default
+        if (Auth::guard("users")->check()) { // guard users default
             $user = Auth::user();
             return redirect()->route('user.dashboard')
                 ->with('info', 'Kamu user, bukan petugas ' . $user->username);
@@ -36,7 +36,6 @@ class PetugasLogin
             return redirect()->route('petugas.sign-in')
                 ->with('info', 'Kamu harus login sebagai petugas');
         }
-
 
         return $next($request);
     }

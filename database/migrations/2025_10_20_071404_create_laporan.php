@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('image_laporan_selesai')->nullable();
 
 
-            $table->enum('status', ['pending', 'ditugaskan', 'selesai'])
+            $table->enum('status', ['pending', 'ditugaskan', 'selesai', 'urgent'])
                 ->default('pending');
 
             $table->string('lokasi')->nullable();
